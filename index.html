@@ -11,13 +11,14 @@
     --text:#E7EAEE; --dim:#8890A0; --faint:#4B5261;
     --gold:#E8B85C; --gold-dim:#8A6E3A; --violet:#8B6BFF; --violet-dim:#564489;
     --green:#46C98A; --red:#FF5C68; --amber-glow:rgba(232,184,92,.35);
+    --cyan:#3ECFCF;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased;}
   .mono{font-family:'IBM Plex Mono',monospace;}
   #app{display:flex;flex-direction:column;min-height:100vh;}
   header{
-    display:flex;align-items:center;gap:16px;padding:12px 18px;
+    display:flex;align-items:center;gap:12px;padding:10px 16px;
     border-bottom:1px solid var(--border);
     background:linear-gradient(180deg,#13161C,#0F1218);flex-wrap:wrap;
   }
@@ -29,104 +30,94 @@
   }
   .brand h1{font-size:15px;font-weight:600;margin:0;letter-spacing:.3px;}
   .brand span{display:block;font-size:10px;color:var(--dim);font-weight:400;letter-spacing:.5px;}
-  .badge{font-size:11px;padding:4px 9px;border-radius:20px;font-weight:600;letter-spacing:.4px;border:1px solid var(--border);}
+  .badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;letter-spacing:.4px;border:1px solid var(--border);}
   .badge.paper{color:var(--gold);border-color:var(--gold-dim);background:rgba(232,184,92,.08);}
   .badge.live{color:var(--red);border-color:#7a2a30;background:rgba(255,92,104,.1);}
-  .session-bar{
-    display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:8px;
-    border:1px solid var(--border);background:var(--panel);font-size:11px;
-    font-family:'IBM Plex Mono',monospace;
-  }
+  .session-bar{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-size:11px;font-family:'IBM Plex Mono',monospace;}
   .session-bar .et{color:var(--dim);}
   .session-bar .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
   .session-bar .dot.open{background:var(--green);box-shadow:0 0 6px var(--green);}
   .session-bar .dot.closed{background:var(--faint);}
   .session-bar .dot.spx{background:var(--violet);box-shadow:0 0 6px var(--violet);}
-  .session-pill{
-    font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;letter-spacing:.3px;border:1px solid;
-  }
+  .session-pill{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;letter-spacing:.3px;border:1px solid;}
   .session-pill.open{color:var(--green);border-color:#1d5c40;background:rgba(70,201,138,.08);}
   .session-pill.spx-only{color:var(--violet);border-color:var(--violet-dim);background:rgba(139,107,255,.08);}
   .session-pill.closed{color:var(--faint);border-color:var(--faint);background:transparent;}
-  .candle-pill{
-    font-size:10px;padding:2px 8px;border-radius:5px;font-weight:700;letter-spacing:.3px;border:1px solid;
-    font-family:'IBM Plex Mono',monospace;
-  }
+  .candle-pill{font-size:10px;padding:2px 8px;border-radius:5px;font-weight:700;letter-spacing:.3px;border:1px solid;font-family:'IBM Plex Mono',monospace;}
   .candle-pill.green{color:var(--green);border-color:#1d5c40;background:rgba(70,201,138,.1);}
   .candle-pill.red{color:var(--red);border-color:#7a2a30;background:rgba(255,92,104,.1);}
   .candle-pill.flat{color:var(--faint);border-color:var(--faint);background:transparent;}
   .stat{font-size:11px;color:var(--dim);text-align:right;}
-  .stat b{display:block;font-size:14px;color:var(--text);font-family:'IBM Plex Mono',monospace;}
+  .stat b{display:block;font-size:13px;color:var(--text);font-family:'IBM Plex Mono',monospace;}
   .stat b.pos{color:var(--green);}
   .stat b.neg{color:var(--red);}
   .stat b.warn{color:var(--gold);}
-  button{
-    font-family:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--border);
-    background:var(--panel2);color:var(--text);padding:8px 14px;font-size:12px;font-weight:600;
-    letter-spacing:.2px;transition:all .15s ease;
-  }
+  button{font-family:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:7px 12px;font-size:12px;font-weight:600;letter-spacing:.2px;transition:all .15s ease;}
   button:hover{border-color:var(--faint);}
   button.kill{background:#3a1418;border-color:#7a2a30;color:#ff8890;}
   button.kill:hover{background:#4a1a20;}
   button.arm{background:rgba(232,184,92,.1);border-color:var(--gold-dim);color:var(--gold);}
-  button:disabled{opacity:.35;cursor:not-allowed;}
-  .layout{display:grid;grid-template-columns:260px 1fr 300px;gap:1px;background:var(--border);flex:1;min-height:0;}
-  .panel{background:var(--bg);overflow-y:auto;padding:14px;}
-  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin:0 0 10px;}
-  .tick-card{
-    border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;
-    cursor:pointer;background:var(--panel);transition:border-color .15s;
-  }
+  .layout{display:grid;grid-template-columns:260px 1fr 310px;gap:1px;background:var(--border);flex:1;min-height:0;}
+  .panel{background:var(--bg);overflow-y:auto;padding:12px;}
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin:0 0 8px;}
+  .tick-card{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;background:var(--panel);transition:border-color .15s;}
   .tick-card:hover{border-color:var(--faint);}
   .tick-card.active{border-color:var(--gold);}
-  .tick-card.gated{opacity:.45;}
+  .tick-card.gated{opacity:.4;}
+  .tick-card.blocked{opacity:.3;border-style:dashed;}
   .tick-row{display:flex;justify-content:space-between;align-items:baseline;}
   .tick-sym{font-weight:700;font-size:13px;}
-  .tick-price{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);}
-  .tick-tags{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+  .tick-price{font-family:'IBM Plex Mono',monospace;font-size:12px;}
+  .tick-tags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
   .tag{font-size:9px;padding:2px 6px;border-radius:5px;border:1px solid var(--border);color:var(--dim);letter-spacing:.3px;}
-  .tag.regime-trend{color:var(--green);border-color:#1d5c40;}
-  .tag.regime-rug{color:var(--red);border-color:#7a2a30;}
-  .tag.regime-whipsaw{color:var(--gold);border-color:var(--gold-dim);}
-  .tag.regime-rainbow{color:var(--violet);border-color:var(--violet-dim);}
-  .tag.regime-range{color:var(--dim);}
+  .tag.regime-expansion{color:var(--red);border-color:#7a2a30;}
+  .tag.regime-compression{color:var(--cyan);border-color:#1d5c5c;}
+  .tag.regime-transition{color:var(--gold);border-color:var(--gold-dim);}
+  .tag.regime-trending{color:var(--green);border-color:#1d5c40;}
+  .tag.pattern-king{color:var(--gold);border-color:var(--gold-dim);}
+  .tag.pattern-void{color:var(--violet);border-color:var(--violet-dim);}
+  .tag.pattern-ladder{color:var(--green);border-color:#1d5c40;}
+  .tag.pattern-flip{color:var(--red);border-color:#7a2a30;}
+  .tag.pattern-compression{color:var(--cyan);border-color:#1d5c5c;}
   .score-bar{height:3px;border-radius:2px;background:var(--border);margin-top:6px;overflow:hidden;}
   .score-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));}
-  .ladder-wrap{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--panel);margin-bottom:14px;}
-  .ladder-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-  .ladder-head h3{margin:0;font-size:16px;}
-  .ladder-head .px{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;}
+  .trinity-row{display:flex;gap:4px;margin-top:5px;}
+  .trinity-dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--border);}
+  .trinity-dot.bull{background:var(--green);}
+  .trinity-dot.bear{background:var(--red);}
+  .trinity-dot.neut{background:var(--faint);}
+  .ladder-wrap{border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--panel);margin-bottom:12px;}
+  .ladder-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .ladder-head h3{margin:0;font-size:15px;}
+  .ladder-head .px{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;}
   svg text{font-family:'IBM Plex Mono',monospace;}
-  #ladderSvg{display:block;width:100%;max-width:620px;aspect-ratio:520/360;height:auto;margin:0 auto;}
-  .stop-timer{
-    display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;
-    background:rgba(255,92,104,.15);border:1px solid #7a2a30;color:var(--red);
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .trail-badge{
-    display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;
-    background:rgba(70,201,138,.12);border:1px solid #1d5c40;color:var(--green);
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .reasons{font-size:12px;color:var(--dim);line-height:1.7;}
+  #ladderSvg{display:block;width:100%;max-width:620px;aspect-ratio:520/380;height:auto;margin:0 auto;}
+  .stop-timer{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(255,92,104,.15);border:1px solid #7a2a30;color:var(--red);font-family:'IBM Plex Mono',monospace;}
+  .trail-badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(70,201,138,.12);border:1px solid #1d5c40;color:var(--green);font-family:'IBM Plex Mono',monospace;}
+  .reasons{font-size:11.5px;color:var(--dim);line-height:1.75;}
   .reasons b{color:var(--text);}
+  .vote-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0;}
+  .vote-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:11px;}
+  .vote-cell .label{color:var(--faint);font-size:9px;text-transform:uppercase;letter-spacing:.5px;}
+  .vote-cell .val{font-family:'IBM Plex Mono',monospace;font-weight:600;margin-top:2px;}
+  .vote-cell .val.bull{color:var(--green);}
+  .vote-cell .val.bear{color:var(--red);}
+  .vote-cell .val.neut{color:var(--faint);}
+  .vote-cell .val.gold{color:var(--gold);}
   .pos-card{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--panel);}
   .pos-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;}
   .pos-dir-call{color:var(--gold);}
   .pos-dir-put{color:var(--violet);}
-  .pos-meta{font-size:11px;color:var(--dim);margin-top:4px;font-family:'IBM Plex Mono',monospace;}
-  .pos-pnl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;margin-top:6px;}
-  .pos-status{font-size:10px;margin-top:4px;min-height:18px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-  .settings-block{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;background:var(--panel);}
-  .settings-block label{display:block;font-size:11px;color:var(--dim);margin-bottom:6px;}
-  .settings-block input{
-    width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;
-    color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:12px;margin-bottom:8px;
-  }
-  .settings-block small{color:var(--faint);display:block;margin-top:4px;line-height:1.5;}
-  .conn-row{display:flex;align-items:center;gap:8px;font-size:12px;font-family:'IBM Plex Mono',monospace;margin-bottom:6px;}
-  .log-panel{grid-column:1/-1;border-top:1px solid var(--border);background:var(--panel);padding:10px 16px;height:190px;overflow-y:auto;}
-  .log-line{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--dim);padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.03);}
+  .pos-meta{font-size:10px;color:var(--dim);margin-top:4px;font-family:'IBM Plex Mono',monospace;line-height:1.6;}
+  .pos-pnl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;margin-top:5px;}
+  .pos-status{font-size:10px;margin-top:4px;min-height:16px;display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+  .settings-block{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;background:var(--panel);}
+  .settings-block label{display:block;font-size:11px;color:var(--dim);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+  .settings-block input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:12px;margin-bottom:8px;}
+  .settings-block small{color:var(--faint);display:block;margin-top:4px;line-height:1.5;font-size:10px;}
+  .conn-row{display:flex;align-items:center;gap:8px;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-bottom:5px;}
+  .log-panel{grid-column:1/-1;border-top:1px solid var(--border);background:var(--panel);padding:8px 14px;height:180px;overflow-y:auto;}
+  .log-line{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.03);}
   .log-line .t{color:var(--faint);margin-right:8px;}
   .log-line.enter{color:var(--gold);}
   .log-line.exit-win{color:var(--green);}
@@ -134,13 +125,17 @@
   .log-line.system{color:var(--violet);}
   .log-line.warn{color:var(--gold);}
   .log-line.trail{color:var(--green);}
-  ::-webkit-scrollbar{width:8px;}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-  .empty{color:var(--faint);font-size:12px;padding:20px 0;text-align:center;}
-  .risk-pill{
-    font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid;font-weight:600;letter-spacing:.3px;
-  }
+  .log-line.skip{color:var(--faint);}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+  .empty{color:var(--faint);font-size:12px;padding:16px 0;text-align:center;}
+  .risk-pill{font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid;font-weight:600;letter-spacing:.3px;}
   .risk-naked{color:var(--gold);border-color:var(--gold-dim);background:rgba(232,184,92,.08);}
+  .zone-pill{font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid;font-weight:600;}
+  .zone-above-cw{color:var(--red);border-color:#7a2a30;background:rgba(255,92,104,.08);}
+  .zone-pos-gex{color:var(--cyan);border-color:#1d5c5c;background:rgba(62,207,207,.08);}
+  .zone-neg-gex{color:var(--gold);border-color:var(--gold-dim);background:rgba(232,184,92,.08);}
+  .zone-below-pw{color:var(--violet);border-color:var(--violet-dim);background:rgba(139,107,255,.08);}
 </style>
 </head>
 <body>
@@ -150,7 +145,7 @@
       <div class="mark"></div>
       <div>
         <h1>Heatseeker Autopilot</h1>
-        <span>options node-map engine · v3.6</span>
+        <span>full skylit framework · v3.7</span>
       </div>
     </div>
     <span id="modeBadge" class="badge paper">PAPER MODE</span>
@@ -159,140 +154,168 @@
       <span id="sessionEt" class="et">--:-- ET</span>
       <span id="sessionPill" class="session-pill closed">CLOSED</span>
     </div>
-    <div class="stat">Open Positions<b id="statOpen">0 / 3</b></div>
-    <div class="stat">Position Cap<b id="statCap" class="mono">3</b></div>
+    <div class="stat">Positions<b id="statOpen">0 / 3</b></div>
+    <div class="stat">Cap<b id="statCap" class="mono">3</b></div>
     <div class="stat">Day P&amp;L<b id="statPnl" class="mono">$0.00</b></div>
-    <div class="stat">Trades Today<b id="statTrades">0</b></div>
+    <div class="stat">Trades<b id="statTrades">0</b></div>
     <button id="newDayBtn">New Session</button>
-    <button id="killBtn" class="kill">■ KILL SWITCH</button>
+    <button id="killBtn" class="kill">■ KILL</button>
   </header>
+
   <div class="layout">
-    <div class="panel" id="watchlistPanel">
+    <!-- LEFT — watchlist -->
+    <div class="panel">
       <h2>Watchlist</h2>
       <div id="watchlist"></div>
     </div>
-    <div class="panel" id="mainPanel">
+
+    <!-- CENTER — ladder + engine read -->
+    <div class="panel">
       <div class="ladder-wrap">
         <div class="ladder-head">
           <h3 id="ladderSym">SPY</h3>
-          <div style="display:flex;align-items:center;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
             <div id="stopTimerDisplay" style="display:none;"></div>
             <div id="candlePill" class="candle-pill flat">— flat</div>
             <div class="px mono" id="ladderPx">—</div>
           </div>
         </div>
-        <svg id="ladderSvg" viewBox="0 0 520 360"></svg>
+        <svg id="ladderSvg" viewBox="0 0 520 380"></svg>
       </div>
       <div class="ladder-wrap">
-        <h2 style="margin-bottom:8px;">Engine Read</h2>
+        <h2 style="margin-bottom:6px;">Engine Read</h2>
+        <div class="vote-grid" id="voteGrid"></div>
         <div class="reasons" id="reasonsBox">Waiting for first tick…</div>
       </div>
     </div>
-    <div class="panel" id="rightPanel">
+
+    <!-- RIGHT — positions + settings -->
+    <div class="panel">
       <h2>Open Positions</h2>
       <div id="positions"><div class="empty">No open positions</div></div>
-      <h2 style="margin-top:16px;">Settings</h2>
+
+      <h2 style="margin-top:14px;">Settings</h2>
       <div class="settings-block">
-        <label>Deflection filter — entry rule</label>
-        <div style="font-size:11px;color:var(--dim);line-height:2;">
-          Entries only fire when candle direction <b style="color:var(--text);">confirms a node deflection</b>:<br>
-          <span style="color:var(--red);">▼ Red candle</span> + support node below → <b style="color:var(--gold);">BUY CALL</b><br>
-          <span style="color:var(--green);">▲ Green candle</span> + resistance node above → <b style="color:var(--violet);">BUY PUT</b><br>
-          <span style="color:var(--faint);">Candle disagrees with node bias → no entry, wait.</span>
+        <label>Signal model</label>
+        <div style="font-size:10.5px;color:var(--dim);line-height:1.9;">
+          <b style="color:var(--text);">Trinity</b> GEX + DEX + VEX + Flow votes<br>
+          <b style="color:var(--text);">Pattern</b> King·Void·Ladder·Flip·Compression<br>
+          <b style="color:var(--text);">Deflection</b> Red candle→call · Green→put<br>
+          <b style="color:var(--text);">Regime</b> Expansion·Trending·Compression·Transition<br>
+          <b style="color:var(--text);">Air pocket</b> Gap score + velocity target<br>
+          <span style="color:var(--faint);">Compression pattern → hard skip always.</span>
         </div>
       </div>
       <div class="settings-block">
-        <label>Trading windows (ET)</label>
-        <div style="font-size:11px;color:var(--dim);line-height:2;">
-          <b style="color:var(--gold);">SPY / QQQ</b><br>
-          &nbsp;🟢 9:30 – 11:30am · Morning session<br>
-          &nbsp;⚫ 11:30am – 3:00pm · Midday — no new entries<br>
-          &nbsp;🟢 3:00 – 4:00pm · Power hour<br>
-          <b style="color:var(--violet);">SPX</b><br>
-          &nbsp;🟣 3:00 – 4:00pm · End of day only<br>
-          <span style="color:var(--faint);">Open positions always managed normally — no force-close.</span>
+        <label>Execution doctrine</label>
+        <div style="font-size:10.5px;color:var(--dim);line-height:1.9;">
+          Entry at node — never chase<br>
+          One entry per setup — no averaging down<br>
+          Stop fired on ticker → <b style="color:var(--text);">blocked rest of session</b><br>
+          Theta enemy → enter late in window
         </div>
       </div>
       <div class="settings-block">
-        <label>Exit rules — in priority order</label>
-        <div style="font-size:11px;color:var(--dim);line-height:2;">
-          <b style="color:var(--green);">1.</b> Hit 100% gain ($50) → lock trailing stop at 90% ($45)<br>
-          <b style="color:var(--green);">2.</b> Trail armed + P&amp;L drops to $45 → close, locked in<br>
-          <b style="color:var(--text);">3.</b> Price reaches target node → close<br>
-          <b style="color:var(--red);">4.</b> Price holds beyond stop node 5 min → close<br>
-          <span style="color:var(--faint);">After 100%, worst case is always +$45. Target node still the upside exit.</span>
-        </div>
-      </div>
-      <div class="settings-block">
-        <label>Risk rule</label>
-        <div style="font-size:11px;color:var(--dim);line-height:1.9;">
-          Any losing stop exit locks the position cap to <b style="color:var(--text);">1</b> for the rest of the session.<br>
-          <span style="color:var(--faint);">Resets on New Session only.</span>
+        <label>Exit rules</label>
+        <div style="font-size:10.5px;color:var(--dim);line-height:1.9;">
+          <b style="color:var(--green);">1.</b> 100% (+$50) → trail armed, stop locks at 90% ($45)<br>
+          <b style="color:var(--green);">2.</b> Trail + pullback to $45 → close<br>
+          <b style="color:var(--text);">3.</b> Target node hit → close<br>
+          <b style="color:var(--red);">4.</b> Node break holds 5 min → close<br>
+          <span style="color:var(--faint);">Charm filter last 30min · SPX 3–4pm only</span>
         </div>
       </div>
       <div class="settings-block">
         <label>Connectors</label>
-        <div class="conn-row"><span style="color:var(--green);">●</span>Unusual Whales — GEX/VEX data</div>
+        <div class="conn-row"><span style="color:var(--green);">●</span>Unusual Whales — GEX/DEX/VEX/Flow</div>
         <div class="conn-row"><span style="color:var(--green);">●</span>Robinhood — order execution</div>
-        <small>Auth flows through your connected accounts. No tokens needed.</small>
+        <small>Auth via connected accounts.</small>
       </div>
       <div class="settings-block">
         <label>Arm live trading</label>
         <input id="armPhrase" type="text" placeholder="type ENABLE LIVE to confirm">
         <button id="armBtn" class="arm" style="width:100%;">Arm live trading</button>
-        <small>Trades real money autonomously. Kill switch always disarms instantly.</small>
+        <small>Trades real money autonomously. Kill switch disarms instantly.</small>
       </div>
     </div>
+
     <div class="log-panel" id="logPanel"></div>
   </div>
 </div>
+
 <script>
 /* =============================================================
-   HEATSEEKER AUTOPILOT v3.6
-   Universe   : SPY, QQQ, SPX — all 0DTE.
-   Entry gate : deflection filter:
-                RED candle   + support node below  → BUY CALL
-                GREEN candle + resistance node above → BUY PUT
-   Trading windows (ET):
-     SPY/QQQ : 9:30–11:30am  +  3:00–4:00pm
-     SPX     : 3:00–4:00pm only
-   Open positions: always managed, no force-close.
-   Structure  : naked long calls/puts only.
-   Exit rules (priority):
-     1. P&L >= $50 (100%) → arm trail, lock stop at $45 (90%)
-     2. Trail armed + P&L <= $45 → close, locked in at 90%
-     3. Target node hit → close
-     4. Price holds beyond stop node 5 min → close
-   Risk rule  : any losing STOP → cap locked to 1 for session.
+   HEATSEEKER AUTOPILOT v3.7 — FULL SKYLIT FRAMEWORK
+   16 Skylit learn pages absorbed:
+   ─ Dealer positioning · Intro to gamma · Air pockets/velocity
+   ─ Trinity mode · GEX trading · VEX trading · GEX/VEX alignment
+   ─ Negative GEX · Options flow · Support/resistance GEX
+   ─ Graduate from alerts · Node lifecycle · Rolling floors/ceilings
+   ─ Execution doctrine · Heatseeker patterns · Gamma regimes
+   ─ Reading Heatseeker · Options Greeks
+
+   SIGNAL STACK (in order):
+   1. Gamma regime   → Expansion/Trending/Compression/Transition
+   2. GEX zone       → above-CW / pos-GEX / neg-GEX / below-PW
+   3. Pattern        → King·Void·Ladder·Flip·Compression
+   4. Trinity vote   → GEX+DEX+VEX+Flow (4 votes)
+   5. Node quality   → magnitude + lifecycle + staleness
+   6. Deflection     → red→call, green→put (no fades in neg-GEX)
+   7. Air pocket     → gap score + velocity target
+   8. Execution      → no re-entry after stop, no chase, late entry
+
+   EXIT:
+   100%→trail armed→stop@90%→run to target or 90% whichever first
+   5-min stop clock on node break (disabled once trail armed)
    ============================================================= */
+
+// ── Constants ────────────────────────────────────────────────
 const STOP_HOLD_MS             = 5 * 60 * 1000;
-const STOP_HOLD_LABEL          = '5-min';
 const CAPITAL                  = 50;
-const TRAIL_TRIGGER            = CAPITAL;           // 100% = $50
-const TRAIL_EXIT               = CAPITAL * 0.9;     // 90%  = $45
+const TRAIL_TRIGGER            = CAPITAL;           // $50 = 100%
+const TRAIL_EXIT               = CAPITAL * 0.9;     // $45 = 90%
 const TICK_MS                  = 2200;
 const NODE_FETCH_EVERY_N_TICKS = 8;
 const CANDLE_PERIOD            = 5;
+const MIN_NODE_GEX             = 30;   // below this = weak node, skip
+const CHARM_WINDOW_MINS        = 30;   // last 30min charm filter activates
 
+// ── Session windows (ET minutes since midnight) ───────────────
 const WINDOWS = {
   SPY: [{open:570, close:690},{open:900, close:960}],
   QQQ: [{open:570, close:690},{open:900, close:960}],
   SPX: [{open:900, close:960}],
 };
 
+const TICKERS = [
+  {sym:'SPY', base:560},
+  {sym:'QQQ', base:475},
+  {sym:'SPX', base:5600},
+];
+
+// ── State ────────────────────────────────────────────────────
+const state = {
+  mode:'paper', armed:false, selected:'SPY',
+  currentCap:3, capLocked:false,
+  positions:[], closedToday:[], dayPnl:0, tradesToday:0,
+  tickN:0, ticks:{},
+  blockedTickers: new Set(), // re-entry block after stop fires
+};
+
+// ── Time helpers ─────────────────────────────────────────────
 function getETMinutes(){
   const etStr = new Date().toLocaleString('en-US',{timeZone:'America/New_York'});
-  const et    = new Date(etStr);
-  return et.getHours() * 60 + et.getMinutes();
+  const et = new Date(etStr);
+  return et.getHours()*60 + et.getMinutes();
 }
 function getETTimeString(){
   return new Date().toLocaleTimeString('en-US',{
-    timeZone:'America/New_York', hour:'2-digit', minute:'2-digit', second:'2-digit',
+    timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit'
   });
 }
 function isTradeableNow(sym){
-  const mins = getETMinutes();
-  return (WINDOWS[sym] ?? []).some(w => mins >= w.open && mins < w.close);
+  const m = getETMinutes();
+  return (WINDOWS[sym]??[]).some(w => m >= w.open && m < w.close);
 }
 function globalSessionState(){
   if(isTradeableNow('SPY')) return 'open';
@@ -300,341 +323,557 @@ function globalSessionState(){
   return 'closed';
 }
 function nextWindowLabel(sym){
-  const mins = getETMinutes();
-  const next = (WINDOWS[sym] ?? []).find(w => w.open > mins);
+  const m = getETMinutes();
+  const next = (WINDOWS[sym]??[]).find(w => w.open > m);
   if(!next) return null;
-  const h = Math.floor(next.open / 60);
-  const m = String(next.open % 60).padStart(2,'0');
-  return `opens ${h > 12 ? h-12 : h}:${m}${h>=12?'pm':'am'} ET`;
+  const h = Math.floor(next.open/60), mn = String(next.open%60).padStart(2,'0');
+  return `opens ${h>12?h-12:h}:${mn}${h>=12?'pm':'am'} ET`;
+}
+function inCharmWindow(){
+  // last CHARM_WINDOW_MINS of any session window
+  const m = getETMinutes();
+  return Object.values(WINDOWS).flat().some(w => m >= w.close - CHARM_WINDOW_MINS && m < w.close);
 }
 
-function candleDirection(s){
-  const hist = s.priceHistory;
-  if(hist.length < CANDLE_PERIOD + 1) return 'flat';
-  const prev      = hist[hist.length - 1 - CANDLE_PERIOD];
-  const curr      = hist[hist.length - 1];
-  const threshold = curr * 0.0001;
-  if(curr < prev - threshold) return 'red';
-  if(curr > prev + threshold) return 'green';
-  return 'flat';
-}
-function deflectionConfirmed(direction, candle){
-  if(candle === 'flat') return false;
-  if(direction === 'call' && candle === 'red')   return true;
-  if(direction === 'put'  && candle === 'green') return true;
-  return false;
-}
-
-const TICKERS = [
-  {sym:'SPY', base:670},
-  {sym:'QQQ', base:608},
-  {sym:'SPX', base:6700},
-];
-const state = {
-  mode:'paper', armed:false, selected:'SPY',
-  currentCap:3, capLocked:false,
-  positions:[], closedToday:[], dayPnl:0, tradesToday:0, tickN:0, ticks:{},
-};
-
+// ── Logging ──────────────────────────────────────────────────
 function log(msg, cls=''){
   const el = document.getElementById('logPanel');
-  const d  = document.createElement('div');
+  const d = document.createElement('div');
   d.className = 'log-line ' + cls;
-  const t = new Date().toLocaleTimeString();
-  d.innerHTML = `<span class="t">${t}</span>${msg}`;
+  d.innerHTML = `<span class="t">${new Date().toLocaleTimeString()}</span>${msg}`;
   el.prepend(d);
-  while(el.children.length > 300) el.removeChild(el.lastChild);
+  while(el.children.length > 400) el.removeChild(el.lastChild);
 }
 
-function strikeStepFor(price){
-  if(price > 1000) return 10;
-  if(price > 400)  return 5;
-  if(price > 100)  return 2.5;
+// ── Strike step ───────────────────────────────────────────────
+function strikeStepFor(p){
+  if(p > 1000) return 10;
+  if(p > 400)  return 5;
+  if(p > 100)  return 2.5;
   return 1;
 }
 
+// ── Seed / drift ─────────────────────────────────────────────
 function seedTicker(t){
   const step = strikeStepFor(t.base);
   const strikes = [];
-  for(let i = -6; i <= 6; i++){
+  for(let i=-7;i<=7;i++){
     strikes.push({
-      strike: +(t.base + i * step).toFixed(2),
-      value:  (Math.random()*2-1) * (i===0 ? 40 : 100/(Math.abs(i)+1)),
+      strike: +(t.base + i*step).toFixed(2),
+      value:  (Math.random()*2-1)*(i===0?40:120/(Math.abs(i)+1)),
+      testCount: 0,   // node lifecycle — how many times tested this session
     });
   }
-  return { sym:t.sym, price:t.base, priceHistory:[t.base], strikes, live:false, warnedFailure:false };
+  // seed wall and flip levels
+  const sorted = [...strikes].sort((a,b)=>b.value-a.value);
+  return {
+    sym:t.sym, price:t.base, priceHistory:[t.base],
+    strikes, live:false, warnedFailure:false,
+    callWall: sorted[0].strike,
+    putWall:  sorted[sorted.length-1].strike,
+    flipLevel: t.base + (Math.random()*2-1)*step*2,
+    prevCallWall: sorted[0].strike,
+    prevPutWall:  sorted[sorted.length-1].strike,
+    // DEX / VEX sim values (replaced by live data when available)
+    dexBias: Math.random()>0.5 ? 'bull' : 'bear',
+    vexBias: Math.random()>0.5 ? 'bull' : 'bear',
+    ivTrend: Math.random()>0.5 ? 'rising' : 'falling',
+    flowBias: Math.random()>0.5 ? 'bull' : Math.random()>0.5 ? 'bear' : 'neut',
+  };
 }
 TICKERS.forEach(t => state.ticks[t.sym] = seedTicker(t));
 
 function driftTicker(s){
   const vol = s.price * 0.0009;
-  s.price = +(s.price + (Math.random()*2-1) * vol).toFixed(2);
+  s.price = +(s.price + (Math.random()*2-1)*vol).toFixed(2);
   s.priceHistory.push(s.price);
-  if(s.priceHistory.length > 120) s.priceHistory.shift();
+  if(s.priceHistory.length > 150) s.priceHistory.shift();
   s.strikes.forEach(n => {
-    n.value += (Math.random()*2-1) * 6;
-    n.value  = Math.max(-140, Math.min(140, n.value));
+    n.value += (Math.random()*2-1)*5;
+    n.value = Math.max(-160, Math.min(160, n.value));
   });
-  if(Math.random() < 0.03){
-    const idx = Math.floor(Math.random() * s.strikes.length);
-    s.strikes[idx].value += (Math.random() > .5 ? 1 : -1) * 60;
+  if(Math.random() < 0.025){
+    const idx = Math.floor(Math.random()*s.strikes.length);
+    s.strikes[idx].value += (Math.random()>.5?1:-1)*70;
   }
+  // update walls
+  s.prevCallWall = s.callWall;
+  s.prevPutWall  = s.putWall;
+  const pos = s.strikes.filter(n=>n.value>0).sort((a,b)=>b.value-a.value);
+  const neg = s.strikes.filter(n=>n.value<0).sort((a,b)=>a.value-b.value);
+  if(pos.length) s.callWall = pos[0].strike;
+  if(neg.length) s.putWall  = neg[0].strike;
+  // drift flip
+  s.flipLevel += (Math.random()*2-1)*vol*0.3;
+  // drift DEX/VEX/flow occasionally
+  if(Math.random()<0.05) s.dexBias  = Math.random()>0.5?'bull':'bear';
+  if(Math.random()<0.04) s.vexBias  = Math.random()>0.5?'bull':'bear';
+  if(Math.random()<0.03) s.ivTrend  = Math.random()>0.5?'rising':'falling';
+  if(Math.random()<0.06) s.flowBias = Math.random()>0.5?'bull':Math.random()>0.5?'bear':'neut';
 }
 
+// ── Live node fetch ───────────────────────────────────────────
 let rotateIdx = 0;
 async function fetchLiveNodes(sym){
   const s = state.ticks[sym];
   try{
     const resp = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
+      method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        model:"claude-sonnet-4-6",
-        max_tokens:2000,
+        model:"claude-sonnet-4-6", max_tokens:2000,
         messages:[{role:"user", content:
           `Call get_greek_exposure_by_strike for ticker ${sym}. `+
           `Return ONLY the raw tool result JSON, no commentary.`
         }],
-        mcp_servers:[{ type:"url", url:"https://api.unusualwhales.com/api/mcp", name:"unusual-whales" }],
+        mcp_servers:[{type:"url",url:"https://api.unusualwhales.com/api/mcp",name:"unusual-whales"}],
       })
     });
-    if(resp.status === 429) throw new Error('rate limited (429) — will retry next cycle');
+    if(resp.status===429) throw new Error('rate limited');
     if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
-    const toolResults = (data.content||[]).filter(b => b.type==='mcp_tool_result');
-    if(!toolResults.length) throw new Error('no mcp_tool_result block');
-    const raw  = toolResults[0].content?.[0]?.text || '';
-    const rows = JSON.parse(raw);
-    if(!Array.isArray(rows) || !rows.length) throw new Error('empty result');
-    let parsed = rows.map(r =>({
-      strike: parseFloat(r.strike),
-      value:  parseFloat(r.call_gex||0) + parseFloat(r.put_gex||0),
-    })).filter(n => !isNaN(n.strike) && !isNaN(n.value))
-      .sort((a,b) => a.strike - b.strike);
-    if(parsed.length > 13){
-      const ci = parsed.reduce((bi,n,i) =>
-        Math.abs(n.strike-s.price) < Math.abs(parsed[bi].strike-s.price) ? i : bi, 0);
-      parsed = parsed.slice(Math.max(0,ci-6), ci+7);
+    const tr = (data.content||[]).filter(b=>b.type==='mcp_tool_result');
+    if(!tr.length) throw new Error('no tool result');
+    const rows = JSON.parse(tr[0].content?.[0]?.text||'');
+    if(!Array.isArray(rows)||!rows.length) throw new Error('empty');
+    let parsed = rows.map(r=>({
+      strike:  parseFloat(r.strike),
+      value:   parseFloat(r.call_gex||0)+parseFloat(r.put_gex||0),
+      testCount: 0,
+    })).filter(n=>!isNaN(n.strike)&&!isNaN(n.value)).sort((a,b)=>a.strike-b.strike);
+    if(parsed.length>15){
+      const ci = parsed.reduce((bi,n,i)=>
+        Math.abs(n.strike-s.price)<Math.abs(parsed[bi].strike-s.price)?i:bi,0);
+      parsed = parsed.slice(Math.max(0,ci-7),ci+8);
     }
+    // preserve test counts for lifecycle tracking
+    parsed.forEach(n=>{
+      const old = s.strikes.find(o=>Math.abs(o.strike-n.strike)<0.01);
+      if(old) n.testCount = old.testCount;
+    });
     s.strikes = parsed;
-    s.live = true;
-    s.warnedFailure = false;
+    const pos = parsed.filter(n=>n.value>0).sort((a,b)=>b.value-a.value);
+    const neg = parsed.filter(n=>n.value<0).sort((a,b)=>a.value-b.value);
+    if(pos.length) s.callWall = pos[0].strike;
+    if(neg.length) s.putWall  = neg[0].strike;
+    s.live = true; s.warnedFailure = false;
   }catch(e){
     if(!s.warnedFailure){
-      log(`Live node fetch failed for ${sym} — ${e.message} — sim nodes active`, 'exit-loss');
+      log(`Node fetch failed ${sym} — ${e.message} — sim active`,'exit-loss');
       s.warnedFailure = true;
     }
     s.live = false;
-    driftTicker(s);
   }
 }
 
-function classify(s){
-  const vals  = s.strikes.map(n => Math.abs(n.value));
-  const king  = s.strikes.reduce((a,b) => Math.abs(b.value)>Math.abs(a.value) ? b : a);
-  const above = s.strikes.filter(n => n.strike > s.price).sort((a,b) => a.strike-b.strike);
-  const below = s.strikes.filter(n => n.strike < s.price).sort((a,b) => b.strike-a.strike);
-  const gkAbove     = above.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
-  const gkBelow     = below.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
-  const strongCount = vals.filter(v => v > 70).length;
-  const upSkew   = above.reduce((a,n) => a + n.value, 0);
-  const downSkew = below.reduce((a,n) => a + Math.abs(Math.min(0,n.value)), 0);
-  let regime = 'range';
-  if(strongCount >= 4) regime = 'rainbow';
-  else if(Math.abs(king.value) > 60 && strongCount <= 2 && Math.abs(upSkew-downSkew) > 60) regime = 'trend';
-  else if(gkAbove && gkBelow && gkAbove.value > 0 && gkBelow.value < -40) regime = 'rug';
-  else if(strongCount >= 2) regime = 'whipsaw';
-  return {king, gkAbove, gkBelow, above, below, regime};
+// ── Candle direction ──────────────────────────────────────────
+function candleDirection(s){
+  const h = s.priceHistory;
+  if(h.length < CANDLE_PERIOD+1) return 'flat';
+  const prev = h[h.length-1-CANDLE_PERIOD];
+  const curr = h[h.length-1];
+  const thr  = curr*0.0001;
+  if(curr < prev-thr) return 'red';
+  if(curr > prev+thr) return 'green';
+  return 'flat';
+}
+function deflectionConfirmed(direction, candle){
+  if(candle==='flat') return false;
+  return (direction==='call' && candle==='red') || (direction==='put' && candle==='green');
 }
 
-function scoreSetup(s, meta){
-  let score = 0;
-  const reasons = [];
-  switch(meta.regime){
-    case 'trend':   score += 3; reasons.push('Trend regime — king node stepping away from spot'); break;
-    case 'rug':     score += 3; reasons.push('Rug regime — positive cap over negative floor'); break;
-    case 'whipsaw': score += 1; reasons.push('Whipsaw — trade edges only'); break;
-    case 'rainbow': score -= 3; reasons.push('Rainbow Road — standing aside'); break;
-    default: reasons.push('No clear regime');
+// ── GEX Zone ─────────────────────────────────────────────────
+function getGEXZone(s){
+  if(s.price >= s.callWall)  return 'above-cw';
+  if(s.price >= s.flipLevel) return 'pos-gex';
+  if(s.price >= s.putWall)   return 'neg-gex';
+  return 'below-pw';
+}
+
+// ── Gamma Regime ─────────────────────────────────────────────
+function getGammaRegime(s){
+  const zone = getGEXZone(s);
+  const flipDist = Math.abs(s.price - s.flipLevel);
+  const step = strikeStepFor(s.price);
+  // transition = price within 1 step of flip
+  if(flipDist < step) return 'transition';
+  // expansion = just crossed flip (wall moving direction)
+  const cwMoving = Math.abs(s.callWall - s.prevCallWall) > step*0.3;
+  const pwMoving = Math.abs(s.putWall  - s.prevPutWall)  > step*0.3;
+  if((zone==='neg-gex'||zone==='below-pw') && (cwMoving||pwMoving)) return 'expansion';
+  if(zone==='neg-gex' || zone==='below-pw') return 'trending';
+  return 'compression';
+}
+
+// ── Pattern detection ─────────────────────────────────────────
+function detectPattern(s){
+  const sorted = [...s.strikes].sort((a,b)=>Math.abs(b.value)-Math.abs(a.value));
+  const king = sorted[0];
+  const step = strikeStepFor(s.price);
+  // Compression — nodes tightly stacked, many strong nodes close together
+  const strong = s.strikes.filter(n=>Math.abs(n.value)>60);
+  if(strong.length>=4){
+    const spread = Math.max(...strong.map(n=>n.strike)) - Math.min(...strong.map(n=>n.strike));
+    if(spread < step*3) return 'compression';
   }
-  const distAbove = meta.gkAbove ? Math.abs(meta.gkAbove.strike - s.price) : Infinity;
-  const distBelow = meta.gkBelow ? Math.abs(meta.gkBelow.strike - s.price) : Infinity;
+  // Polarity flip — broken node (was support, now acts as resistance or vice versa)
+  const recentBreak = s.strikes.find(n=>
+    n.testCount>=2 &&
+    Math.abs(n.strike-s.price)<step*1.5 &&
+    ((n.value>0 && s.price<n.strike) || (n.value<0 && s.price>n.strike))
+  );
+  if(recentBreak) return 'flip';
+  // Void — large gap between nodes near spot
+  const above = s.strikes.filter(n=>n.strike>s.price).sort((a,b)=>a.strike-b.strike);
+  const below = s.strikes.filter(n=>n.strike<s.price).sort((a,b)=>b.strike-a.strike);
+  if(above.length>=2 && Math.abs(above[1].strike-above[0].strike)>step*2) return 'void';
+  if(below.length>=2 && Math.abs(below[0].strike-below[1].strike)>step*2) return 'void';
+  // Ladder — nodes evenly spaced stepping in one direction
+  if(s.strikes.length>=5){
+    const vals = s.strikes.map(n=>n.value);
+    const trending = vals.every((v,i)=>i===0||v<=vals[i-1]) || vals.every((v,i)=>i===0||v>=vals[i-1]);
+    if(trending) return 'ladder';
+  }
+  // King and Court — one dominant, others much smaller
+  if(sorted.length>=3 && Math.abs(king.value) > Math.abs(sorted[1].value)*2.2) return 'king';
+  return 'none';
+}
+
+// ── Trinity vote ─────────────────────────────────────────────
+function trinityVote(s){
+  const zone = getGEXZone(s);
+  // GEX vote
+  const gexVote = (zone==='pos-gex'||zone==='above-cw') ? 'bull' :
+                  (zone==='neg-gex'||zone==='below-pw')  ? 'bear' : 'neut';
+  // DEX vote
+  const dexVote = s.dexBias;
+  // VEX vote — vanna × IV direction
+  let vexVote = 'neut';
+  if(s.vexBias==='bull' && s.ivTrend==='rising')  vexVote = 'bull';
+  if(s.vexBias==='bull' && s.ivTrend==='falling') vexVote = 'bear';
+  if(s.vexBias==='bear' && s.ivTrend==='rising')  vexVote = 'bear';
+  if(s.vexBias==='bear' && s.ivTrend==='falling') vexVote = 'bull';
+  // Flow vote
+  const flowVote = s.flowBias;
+  const votes = [gexVote, dexVote, vexVote, flowVote];
+  const bullCount = votes.filter(v=>v==='bull').length;
+  const bearCount = votes.filter(v=>v==='bear').length;
   let direction = null;
-  if(distBelow < distAbove && meta.gkBelow){
-    direction = 'call'; score += 2; reasons.push(`Support node at ${meta.gkBelow.strike} — watching for red candle deflection`);
-  } else if(meta.gkAbove){
-    direction = 'put'; score += 2; reasons.push(`Resistance node at ${meta.gkAbove.strike} — watching for green candle deflection`);
-  }
-  if(Math.abs(meta.king.value) > 90){
-    score += 2; reasons.push(`King magnitude ${meta.king.value.toFixed(0)} at ${meta.king.strike}`);
-  }
-  const step    = strikeStepFor(s.price);
-  const closest = Math.min(distAbove, distBelow);
-  if(closest < step * 2){ score += 1; reasons.push('Spot tight against dominant node'); }
-  let stopNode = null, targetNode = null;
-  if(direction === 'call'){ stopNode = meta.gkBelow; targetNode = meta.gkAbove; }
-  else if(direction === 'put'){ stopNode = meta.gkAbove; targetNode = meta.gkBelow; }
-  const structure = score >= 6 ? 'naked' : 'none';
-  return {score, direction, reasons, stopNode, targetNode, structure};
+  if(bullCount>=2 && bullCount>bearCount) direction = 'call';
+  if(bearCount>=2 && bearCount>bullCount) direction = 'put';
+  const strength = Math.max(bullCount,bearCount); // 2,3,4
+  return {gexVote,dexVote,vexVote,flowVote,bullCount,bearCount,direction,strength,votes};
 }
 
+// ── Node quality ──────────────────────────────────────────────
+function nodeQuality(node){
+  const mag = Math.abs(node.value);
+  if(mag < MIN_NODE_GEX) return 'weak';
+  if(node.testCount === 0) return 'fresh';
+  if(node.testCount === 1) return 'tested';
+  return 'stale';
+}
+
+// ── Air pocket measurement ────────────────────────────────────
+function measureAirPocket(s, direction, targetStrike){
+  const nodesBetween = s.strikes.filter(n=>
+    direction==='call'
+      ? n.strike>s.price && n.strike<targetStrike
+      : n.strike<s.price && n.strike>targetStrike
+  );
+  return {
+    count: nodesBetween.length,
+    gap:   Math.abs(targetStrike - s.price),
+  };
+}
+
+// ── Velocity target selection ─────────────────────────────────
+function selectVelocityTarget(s, direction){
+  const step = strikeStepFor(s.price);
+  const candidates = direction==='call'
+    ? s.strikes.filter(n=>n.strike>s.price).sort((a,b)=>a.strike-b.strike)
+    : s.strikes.filter(n=>n.strike<s.price).sort((a,b)=>b.strike-a.strike);
+  if(!candidates.length) return null;
+  // find node after largest gap
+  for(let i=1;i<candidates.length;i++){
+    const gap = Math.abs(candidates[i].strike-candidates[i-1].strike);
+    if(gap >= step*2) return candidates[i];
+  }
+  return candidates[candidates.length-1];
+}
+
+// ── Main classify + score ─────────────────────────────────────
+function classifyAndScore(s){
+  const zone    = getGEXZone(s);
+  const regime  = getGammaRegime(s);
+  const pattern = detectPattern(s);
+  const trinity = trinityVote(s);
+  const candle  = candleDirection(s);
+
+  // find king, gatekeepers
+  const king    = s.strikes.reduce((a,b)=>Math.abs(b.value)>Math.abs(a.value)?b:a);
+  const above   = s.strikes.filter(n=>n.strike>s.price).sort((a,b)=>a.strike-b.strike);
+  const below   = s.strikes.filter(n=>n.strike<s.price).sort((a,b)=>b.strike-a.strike);
+  const gkAbove = above.reduce((best,n)=>!best||Math.abs(n.value)>Math.abs(best.value)?n:best,null);
+  const gkBelow = below.reduce((best,n)=>!best||Math.abs(n.value)>Math.abs(best.value)?n:best,null);
+
+  const reasons = [];
+  let score = 0;
+
+  // ── Hard blocks ───────────────────────────────────────────
+  if(pattern==='compression'){
+    return {score:0,direction:null,stopNode:null,targetNode:null,
+      zone,regime,pattern,trinity,king,gkAbove,gkBelow,
+      reasons:['⛔ Compression pattern — mandatory skip'],blocked:true};
+  }
+  if(regime==='transition'){
+    return {score:0,direction:null,stopNode:null,targetNode:null,
+      zone,regime,pattern,trinity,king,gkAbove,gkBelow,
+      reasons:['⛔ Transition regime — flip being tested, standing aside'],blocked:true};
+  }
+
+  // ── Trinity score ─────────────────────────────────────────
+  if(trinity.strength>=4){score+=4;reasons.push(`Trinity 4/4 — all votes aligned ${trinity.direction==='call'?'bullish':'bearish'}`);}
+  else if(trinity.strength===3){score+=3;reasons.push(`Trinity 3/4 — strong ${trinity.direction==='call'?'bullish':'bearish'}`);}
+  else if(trinity.strength===2){score+=2;reasons.push(`Trinity 2/4 — moderate ${trinity.direction==='call'?'bullish':'bearish'}`);}
+  else{return {score:0,direction:null,stopNode:null,targetNode:null,
+    zone,regime,pattern,trinity,king,gkAbove,gkBelow,
+    reasons:['Trinity < 2/4 — no directional agreement'],blocked:false};}
+
+  const direction = trinity.direction;
+
+  // ── Regime bonus/penalty ──────────────────────────────────
+  if(regime==='expansion'){score+=2;reasons.push('Expansion regime — flip just crossed, explosive move expected');}
+  else if(regime==='trending'){score+=2;reasons.push('Trending regime — sustained negative GEX, momentum active');}
+  else if(regime==='compression'){score-=2;}// already blocked above
+
+  // ── Pattern bonus ─────────────────────────────────────────
+  if(pattern==='king'){score+=3;reasons.push('King and Court — dominant node, highest confidence fade');}
+  else if(pattern==='void'){score+=2;reasons.push('Void pattern — air pocket confirmed, velocity trade');}
+  else if(pattern==='ladder'){score+=2;reasons.push('Ladder pattern — rolling floor/ceiling, trend confirmed');}
+  else if(pattern==='flip'){score+=2;reasons.push('Polarity Flip — broken node momentum signal');}
+
+  // ── GEX zone context ──────────────────────────────────────
+  if(zone==='neg-gex'||zone==='below-pw'){
+    if(direction==='put'){score+=1;reasons.push('Negative GEX zone — momentum aligns with put direction');}
+    else{score-=1;reasons.push('Negative GEX — fade bias, call entry is counter-momentum');}
+  }
+  if(zone==='pos-gex'&&direction==='call'){score+=1;reasons.push('Positive GEX — dealers support dips');}
+  if(zone==='above-cw'&&direction==='put'){score+=1;reasons.push('Above call wall — hard ceiling, fade calls');}
+
+  // ── Stop / target node selection ──────────────────────────
+  let stopNode   = direction==='call' ? gkBelow : gkAbove;
+  let targetNode = selectVelocityTarget(s, direction);
+  // cap target at walls
+  if(direction==='call' && targetNode && targetNode.strike > s.callWall)
+    targetNode = s.strikes.find(n=>Math.abs(n.strike-s.callWall)<strikeStepFor(s.price))||targetNode;
+  if(direction==='put' && targetNode && targetNode.strike < s.putWall)
+    targetNode = s.strikes.find(n=>Math.abs(n.strike-s.putWall)<strikeStepFor(s.price))||targetNode;
+
+  // ── Node quality check ────────────────────────────────────
+  if(!stopNode){return {score:0,direction,stopNode:null,targetNode,zone,regime,pattern,trinity,king,gkAbove,gkBelow,reasons:[...reasons,'No valid stop node found'],blocked:false};}
+  const quality = nodeQuality(stopNode);
+  if(quality==='weak'){return {score:0,direction,stopNode,targetNode,zone,regime,pattern,trinity,king,gkAbove,gkBelow,reasons:[...reasons,'Stop node GEX too weak (<30) — skip'],blocked:false};}
+  if(quality==='fresh'){score+=1;reasons.push('Stop node first test this session — strong');}
+  if(quality==='stale'){score-=1;reasons.push('Stop node tested 2+ times — degraded strength');}
+
+  // ── Air pocket bonus ──────────────────────────────────────
+  if(targetNode){
+    const pocket = measureAirPocket(s, direction, targetNode.strike);
+    if(pocket.count===0){score+=2;reasons.push(`Clean air pocket to target ${targetNode.strike} — velocity expected`);}
+    else if(pocket.count===1){score+=1;reasons.push('Thin air pocket — some acceleration expected');}
+    else{score-=1;reasons.push('Congested path to target — nodes blocking');}
+  }
+
+  // ── Pin risk ──────────────────────────────────────────────
+  const step = strikeStepFor(s.price);
+  const nearLargeOI = s.strikes.find(n=>
+    Math.abs(n.strike-s.price)<step*1.5 &&
+    Math.abs(n.value)>120 &&
+    n!==stopNode
+  );
+  if(nearLargeOI){score-=1;reasons.push(`Pin risk — large OI at ${nearLargeOI.strike} near spot`);}
+
+  // ── Charm filter ──────────────────────────────────────────
+  if(inCharmWindow()){
+    // charm unwind: OTM deltas → 0, ITM → 1
+    // rough heuristic: if charm window AND negative GEX = charm amplifies move
+    if(regime==='trending'||regime==='expansion'){
+      score+=1;reasons.push('Charm window — decay accelerating, delta unwind adds momentum');
+    } else {
+      reasons.push('Charm window active — monitoring delta decay');
+    }
+  }
+
+  // ── Negative GEX momentum-only rule ──────────────────────
+  if((zone==='neg-gex'||zone==='below-pw') && direction==='call'){
+    reasons.push('⚠ Negative GEX — calls are counter-momentum, extra caution');
+  }
+
+  return {score,direction,stopNode,targetNode,zone,regime,pattern,trinity,king,gkAbove,gkBelow,reasons,blocked:false};
+}
+
+// ── OTM strike selection ──────────────────────────────────────
 function selectOTMStrike(s, direction){
   const step = strikeStepFor(s.price);
-  if(direction === 'call'){
-    const candidates = s.strikes.filter(n => n.strike > s.price).sort((a,b) => a.strike-b.strike);
-    return candidates[0]?.strike ?? +(Math.ceil(s.price / step) * step + step).toFixed(2);
-  } else {
-    const candidates = s.strikes.filter(n => n.strike < s.price).sort((a,b) => b.strike-a.strike);
-    return candidates[0]?.strike ?? +(Math.floor(s.price / step) * step - step).toFixed(2);
+  if(direction==='call'){
+    const c = s.strikes.filter(n=>n.strike>s.price).sort((a,b)=>a.strike-b.strike);
+    return c[0]?.strike ?? +(Math.ceil(s.price/step)*step+step).toFixed(2);
   }
+  const c = s.strikes.filter(n=>n.strike<s.price).sort((a,b)=>b.strike-a.strike);
+  return c[0]?.strike ?? +(Math.floor(s.price/step)*step-step).toFixed(2);
 }
 
+// ── Entry ─────────────────────────────────────────────────────
 function tryEnter(sym){
-  if(!isTradeableNow(sym)) return;
-  if(state.positions.find(p => p.sym === sym)) return;
-  if(state.positions.length >= state.currentCap) return;
+  if(!isTradeableNow(sym))                   return;
+  if(state.blockedTickers.has(sym))          return; // re-entry block
+  if(state.positions.find(p=>p.sym===sym))   return;
+  if(state.positions.length>=state.currentCap) return;
+
   const s      = state.ticks[sym];
-  const meta   = classify(s);
-  const setup  = scoreSetup(s, meta);
-  if(setup.score < 6 || !setup.direction || !setup.stopNode) return;
+  const cs     = classifyAndScore(s);
+  if(cs.blocked || cs.score<6 || !cs.direction || !cs.stopNode) return;
 
-  // ── Deflection filter ────────────────────────────────────────
+  // deflection filter — negative GEX = momentum only, no fades
   const candle = candleDirection(s);
-  if(!deflectionConfirmed(setup.direction, candle)) return;
+  const zone   = getGEXZone(s);
+  const negGex = zone==='neg-gex'||zone==='below-pw';
+  if(negGex){
+    // in negative GEX, only trade with momentum direction
+    if(cs.direction==='call' && candle!=='green') return; // momentum up = green candles
+    if(cs.direction==='put'  && candle!=='red')   return; // momentum down = red candles
+  } else {
+    // positive GEX = fade — red candle off support = call, green off resistance = put
+    if(!deflectionConfirmed(cs.direction, candle)) return;
+  }
 
-  const buyStrike = selectOTMStrike(s, setup.direction);
+  const buyStrike = selectOTMStrike(s, cs.direction);
   const pos = {
     id: Math.random().toString(36).slice(2,8),
-    sym, direction: setup.direction, structure: 'naked',
-    entrySpot: s.price, buyStrike, sellStrike: null,
-    stopStrike: setup.stopNode.strike, targetStrike: setup.targetNode?.strike ?? null,
-    dte: 0, capital: CAPITAL, opened: Date.now(), pnl: 0,
-    trailArmed: false,
-    stopCrossedAt: null, stopCountdown: null,
-    entryCandle: candle,
+    sym, direction:cs.direction, structure:'naked',
+    entrySpot:s.price, buyStrike, sellStrike:null,
+    stopStrike:cs.stopNode.strike,
+    targetStrike:cs.targetNode?.strike??null,
+    dte:0, capital:CAPITAL, opened:Date.now(), pnl:0,
+    trailArmed:false, stopCrossedAt:null, stopCountdown:null,
+    entryCandle:candle, entryScore:cs.score,
+    entryPattern:cs.pattern, entryRegime:cs.regime,
+    trinityStrength:cs.trinity.strength,
   };
+  // mark stop node as tested
+  const stopN = s.strikes.find(n=>Math.abs(n.strike-cs.stopNode.strike)<0.01);
+  if(stopN) stopN.testCount++;
+
   state.positions.push(pos);
   state.tradesToday++;
-  const candleLabel = candle === 'red' ? '🔴 red candle' : '🟢 green candle';
+  const candleLabel = negGex
+    ? (candle==='green'?'🟢 momentum green':'🔴 momentum red')
+    : (candle==='red'  ?'🔴 red deflection':'🟢 green deflection');
   log(
-    `ENTER ${sym} — naked long ${pos.direction.toUpperCase()} · ${candleLabel} deflection · `+
-    `strike ${buyStrike} · 0DTE · stop node ${pos.stopStrike} (${STOP_HOLD_LABEL} clock) · `+
-    `target ${pos.targetStrike??'—'} · score ${setup.score} · ${setup.reasons.join('; ')}`, 'enter'
+    `ENTER ${sym} — ${cs.direction.toUpperCase()} · ${candleLabel} · `+
+    `${cs.regime}·${cs.pattern} · Trinity ${cs.trinity.strength}/4 · `+
+    `score ${cs.score} · strike ${buyStrike} · stop ${cs.stopNode.strike} · `+
+    `target ${cs.targetNode?.strike??'—'} · zone ${cs.zone}`, 'enter'
   );
-  if(state.mode === 'live' && state.armed) executeLiveOrder(pos);
-  else log(`[PAPER] would route ${sym} naked long ${pos.direction.toUpperCase()} @ ${buyStrike} 0DTE to Robinhood`, 'system');
+  if(state.mode==='live'&&state.armed) executeLiveOrder(pos);
+  else log(`[PAPER] would route ${sym} naked ${cs.direction.toUpperCase()} @ ${buyStrike} 0DTE to Robinhood`,'system');
 }
 
+// ── Position management ───────────────────────────────────────
 function manage(){
   const now = Date.now();
-  state.positions.slice().forEach(pos => {
-    const s     = state.ticks[pos.sym];
-    const px    = s.price;
-    const delta = 0.4;
-    let pnl = (px - pos.entrySpot) * (pos.direction==='call' ? 1 : -1) * delta * 10;
+  state.positions.slice().forEach(pos=>{
+    const s  = state.ticks[pos.sym];
+    const px = s.price;
+    let pnl  = (px-pos.entrySpot)*(pos.direction==='call'?1:-1)*0.4*10;
     pnl = Math.max(-pos.capital, pnl);
     pos.pnl = pnl;
 
-    // ── 1. Arm 100% trail — lock stop at 90% ($45) ────────────
-    if(!pos.trailArmed && pnl >= TRAIL_TRIGGER){
+    // 1. Arm 100% trail
+    if(!pos.trailArmed && pnl>=TRAIL_TRIGGER){
       pos.trailArmed = true;
-      log(
-        `${pos.sym} hit 100% (+$${pnl.toFixed(2)}) — trail armed · `+
-        `stop locked at $${TRAIL_EXIT.toFixed(0)} (90%) · running to target node`, 'trail'
-      );
+      log(`${pos.sym} hit 100% (+$${pnl.toFixed(2)}) — trail armed · stop locked at $${TRAIL_EXIT.toFixed(0)} (90%)`,'trail');
       return;
     }
-
-    // ── 2. Trail exit — pull back to 90% ──────────────────────
-    if(pos.trailArmed && pnl <= TRAIL_EXIT){
-      closePosition(pos, 'TRAIL-90%', pnl); return;
+    // 2. Trail exit at 90%
+    if(pos.trailArmed && pnl<=TRAIL_EXIT){
+      closePosition(pos,'TRAIL-90%',pnl); return;
     }
-
-    // ── 3. Target node hit ─────────────────────────────────────
-    // Always check target even when trailing — target is the upside exit
-    if(pos.targetStrike !== null){
-      const hit = pos.direction === 'call' ? px >= pos.targetStrike : px <= pos.targetStrike;
-      if(hit){ closePosition(pos, 'TARGET', pnl); return; }
+    // 3. Target node hit
+    if(pos.targetStrike!==null){
+      const hit = pos.direction==='call' ? px>=pos.targetStrike : px<=pos.targetStrike;
+      if(hit){ closePosition(pos,'TARGET',pnl); return; }
     }
-
-    // ── 4. 5-minute stop clock (only fires before trail arms) ──
+    // 4. 5-min stop clock (disabled once trailing)
     if(!pos.trailArmed){
-      const beyondStop = pos.direction === 'call' ? px < pos.stopStrike : px > pos.stopStrike;
-      if(beyondStop){
-        if(pos.stopCrossedAt === null){
+      const beyond = pos.direction==='call' ? px<pos.stopStrike : px>pos.stopStrike;
+      if(beyond){
+        if(pos.stopCrossedAt===null){
           pos.stopCrossedAt = now;
-          log(
-            `${pos.sym} broke through stop node ${pos.stopStrike} — `+
-            `${STOP_HOLD_LABEL} clock started (${pos.direction.toUpperCase()})`, 'warn'
-          );
+          log(`${pos.sym} broke stop node ${pos.stopStrike} — 5-min clock started`,'warn');
         }
-        const elapsed = now - pos.stopCrossedAt;
-        pos.stopCountdown = Math.max(0, STOP_HOLD_MS - elapsed);
-        if(elapsed >= STOP_HOLD_MS){ closePosition(pos, 'STOP-5MIN', pnl); return; }
+        const elapsed = now-pos.stopCrossedAt;
+        pos.stopCountdown = Math.max(0, STOP_HOLD_MS-elapsed);
+        if(elapsed>=STOP_HOLD_MS){ closePosition(pos,'STOP-5MIN',pnl); return; }
       } else {
-        if(pos.stopCrossedAt !== null){
-          log(`${pos.sym} recrossed back through stop node ${pos.stopStrike} — clock reset to zero`, 'system');
-        }
-        pos.stopCrossedAt = null;
-        pos.stopCountdown = null;
+        if(pos.stopCrossedAt!==null) log(`${pos.sym} recrossed stop node ${pos.stopStrike} — clock reset`,'system');
+        pos.stopCrossedAt=null; pos.stopCountdown=null;
       }
     } else {
-      // trail is armed — node stop clock no longer relevant, clear it
-      pos.stopCrossedAt = null;
-      pos.stopCountdown = null;
+      pos.stopCrossedAt=null; pos.stopCountdown=null;
     }
   });
 }
 
 function closePosition(pos, reason, pnl){
-  state.positions = state.positions.filter(p => p.id !== pos.id);
+  state.positions = state.positions.filter(p=>p.id!==pos.id);
   state.dayPnl   += pnl;
-  state.closedToday.push({...pos, reason, pnl});
-  const win = pnl >= 0;
+  state.closedToday.push({...pos,reason,pnl});
+  const win = pnl>=0;
   log(
     `EXIT ${pos.sym} (${reason}) — ${win?'+':''}$${pnl.toFixed(2)} · `+
-    `naked ${pos.direction} ${pos.buyStrike} 0DTE`+
-    `${pos.trailArmed ? ' · was trailing (90% stop)' : ''}`,
-    win ? 'exit-win' : 'exit-loss'
+    `${pos.direction} ${pos.buyStrike} 0DTE`+
+    `${pos.trailArmed?' · trailing (90% stop)':''}`,
+    win?'exit-win':'exit-loss'
   );
-  if(reason.startsWith('STOP') && pnl < 0 && !state.capLocked){
-    state.currentCap = 1;
-    state.capLocked  = true;
-    log(`Losing stop recorded — position cap locked to 1 for the rest of the session`, 'exit-loss');
+  // re-entry block after losing stop
+  if(reason.startsWith('STOP') && pnl<0){
+    state.blockedTickers.add(pos.sym);
+    log(`${pos.sym} blocked for new entries rest of session (execution doctrine)`,'warn');
+    if(!state.capLocked){
+      state.currentCap=1; state.capLocked=true;
+      log(`Losing stop — position cap locked to 1 for session`,'exit-loss');
+    }
   }
-  if(state.mode === 'live' && state.armed) executeLiveClose(pos, reason);
+  if(state.mode==='live'&&state.armed) executeLiveClose(pos,reason);
 }
 
+// ── Live order execution ──────────────────────────────────────
 async function executeLiveOrder(pos){
-  const expDate     = new Date().toISOString().slice(0,10);
-  const candleLabel = pos.entryCandle === 'red'
-    ? 'red candle deflection off support node'
-    : 'green candle deflection off resistance node';
-  const orderDesc =
-    `Buy to open 1 ${pos.sym} ${pos.direction} option at strike ${pos.buyStrike}, `+
-    `expiring ${expDate} (0DTE). Entry signal: ${candleLabel}. `+
-    `Budget $${pos.capital} in premium. Limit order at mid.`;
+  const expDate = new Date().toISOString().slice(0,10);
+  const signal  = `${pos.entryRegime} regime · ${pos.entryPattern} pattern · `+
+                  `Trinity ${pos.trinityStrength}/4 · ${pos.entryCandle} candle deflection`;
+  const desc = `Buy to open 1 ${pos.sym} ${pos.direction} option at strike ${pos.buyStrike}, `+
+               `expiring ${expDate} (0DTE). Signal: ${signal}. `+
+               `Budget $${pos.capital} premium. Limit at mid.`;
   try{
     const resp = await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
         model:"claude-sonnet-4-6", max_tokens:1200,
         messages:[{role:"user", content:
-          `Confirm ${pos.sym} options chain via Unusual Whales for strike ${pos.buyStrike} `+
-          `expiring ${expDate}, then place this order on Robinhood: ${orderDesc} `+
-          `Report fill price and order ID.`
+          `Confirm ${pos.sym} chain via Unusual Whales for strike ${pos.buyStrike} `+
+          `expiring ${expDate}, then place on Robinhood: ${desc} Report fill + order ID.`
         }],
         mcp_servers:[
-          {type:"url", url:"https://api.unusualwhales.com/api/mcp",   name:"unusual-whales"},
-          {type:"url", url:"https://agent.robinhood.com/mcp/trading", name:"robinhood"},
+          {type:"url",url:"https://api.unusualwhales.com/api/mcp",name:"unusual-whales"},
+          {type:"url",url:"https://agent.robinhood.com/mcp/trading",name:"robinhood"},
         ],
       })
     });
     const data = await resp.json();
-    log(`[LIVE] order sent ${pos.sym}: ${JSON.stringify(data.content||data).slice(0,180)}`, 'system');
-  }catch(e){
-    log(`[LIVE] order FAILED ${pos.sym}: ${e.message}`, 'exit-loss');
-  }
+    log(`[LIVE] order sent ${pos.sym}: ${JSON.stringify(data.content||data).slice(0,180)}`,'system');
+  }catch(e){ log(`[LIVE] order FAILED ${pos.sym}: ${e.message}`,'exit-loss'); }
 }
 
 async function executeLiveClose(pos, reason){
@@ -644,203 +883,253 @@ async function executeLiveClose(pos, reason){
       body: JSON.stringify({
         model:"claude-sonnet-4-6", max_tokens:1000,
         messages:[{role:"user", content:
-          `Close the open ${pos.sym} naked long ${pos.direction} at strike ${pos.buyStrike} `+
-          `position on Robinhood. Opened at spot ${pos.entrySpot}, 0DTE. `+
-          `Reason: ${reason}. Sell to close at market. Report fill confirmation.`
+          `Close ${pos.sym} naked long ${pos.direction} strike ${pos.buyStrike} on Robinhood. `+
+          `Spot at entry: ${pos.entrySpot}. 0DTE. Reason: ${reason}. Sell to close at market.`
         }],
-        mcp_servers:[{type:"url", url:"https://agent.robinhood.com/mcp/trading", name:"robinhood"}],
+        mcp_servers:[{type:"url",url:"https://agent.robinhood.com/mcp/trading",name:"robinhood"}],
       })
     });
     const data = await resp.json();
-    log(`[LIVE] close sent ${pos.sym}: ${JSON.stringify(data.content||data).slice(0,180)}`, 'system');
-  }catch(e){
-    log(`[LIVE] close FAILED ${pos.sym}: ${e.message} — CHECK ROBINHOOD MANUALLY`, 'exit-loss');
-  }
+    log(`[LIVE] close sent ${pos.sym}: ${JSON.stringify(data.content||data).slice(0,180)}`,'system');
+  }catch(e){ log(`[LIVE] close FAILED ${pos.sym}: ${e.message} — CHECK ROBINHOOD MANUALLY`,'exit-loss'); }
 }
 
+// ── Render helpers ────────────────────────────────────────────
 function renderSessionBar(){
   const sess = globalSessionState();
   const dot  = document.getElementById('sessionDot');
   const pill = document.getElementById('sessionPill');
-  document.getElementById('sessionEt').textContent = getETTimeString() + ' ET';
-  if(sess === 'open'){
-    dot.className  = 'dot open';
-    pill.className = 'session-pill open';
-    pill.textContent = 'MORNING  +  POWER HOUR';
-  } else if(sess === 'spx-only'){
-    dot.className  = 'dot spx';
-    pill.className = 'session-pill spx-only';
-    pill.textContent = 'POWER HOUR — SPX only';
+  document.getElementById('sessionEt').textContent = getETTimeString()+' ET';
+  if(sess==='open'){
+    dot.className='dot open'; pill.className='session-pill open';
+    pill.textContent='MORNING + POWER HOUR';
+  } else if(sess==='spx-only'){
+    dot.className='dot spx'; pill.className='session-pill spx-only';
+    pill.textContent='POWER HOUR — SPX only';
   } else {
-    dot.className  = 'dot closed';
-    pill.className = 'session-pill closed';
+    dot.className='dot closed'; pill.className='session-pill closed';
     const next = nextWindowLabel('SPY');
-    pill.textContent = next ? `CLOSED · SPY/QQQ ${next}` : 'CLOSED';
+    pill.textContent = next ? `CLOSED · ${next}` : 'CLOSED';
   }
+}
+
+function zoneLabel(z){
+  return {
+    'above-cw':'▲ above call wall','pos-gex':'◈ pos GEX',
+    'neg-gex':'◈ neg GEX','below-pw':'▼ below put wall'
+  }[z]||z;
+}
+function zoneClass(z){
+  return {'above-cw':'zone-above-cw','pos-gex':'zone-pos-gex','neg-gex':'zone-neg-gex','below-pw':'zone-below-pw'}[z]||'';
 }
 
 function renderWatchlist(){
   const el = document.getElementById('watchlist');
-  el.innerHTML = '';
-  TICKERS.forEach(t => {
-    const s         = state.ticks[t.sym];
-    const meta      = classify(s);
-    const setup     = scoreSetup(s, meta);
+  el.innerHTML='';
+  TICKERS.forEach(t=>{
+    const s       = state.ticks[t.sym];
+    const cs      = classifyAndScore(s);
     const tradeable = isTradeableNow(t.sym);
+    const blocked   = state.blockedTickers.has(t.sym);
     const candle    = candleDirection(s);
-    const deflReady = tradeable && setup.direction && deflectionConfirmed(setup.direction, candle);
-    const card      = document.createElement('div');
-    card.className  = 'tick-card' +
-      (state.selected===t.sym ? ' active' : '') +
-      (!tradeable ? ' gated' : '');
-    card.onclick = () => { state.selected = t.sym; renderAll(); };
-    const candleColor = candle==='red' ? 'var(--red)' : candle==='green' ? 'var(--green)' : 'var(--faint)';
-    const candleChar  = candle==='red' ? '▼' : candle==='green' ? '▲' : '—';
-    const windowTag   = tradeable
-      ? `<span class="tag" style="color:var(--green);border-color:#1d5c40;">● entry open</span>`
-      : `<span class="tag" style="color:var(--faint);">⊘ gated</span>`;
-    const deflTag = deflReady
-      ? `<span class="tag" style="color:var(--gold);border-color:var(--gold-dim);">⚡ deflection</span>`
-      : '';
-    card.innerHTML = `
+    const card = document.createElement('div');
+    card.className = 'tick-card'+
+      (state.selected===t.sym?' active':'')+
+      (!tradeable&&!blocked?' gated':'')+
+      (blocked?' blocked':'');
+    card.onclick = ()=>{ state.selected=t.sym; renderAll(); };
+    const cc = candle==='red'?'var(--red)':candle==='green'?'var(--green)':'var(--faint)';
+    const ca = candle==='red'?'▼':candle==='green'?'▲':'—';
+    // trinity dots
+    const dots = cs.trinity ? [cs.trinity.gexVote,cs.trinity.dexVote,cs.trinity.vexVote,cs.trinity.flowVote]
+      .map(v=>`<div class="trinity-dot ${v}"></div>`).join('') : '';
+    const regimeTag = cs.regime
+      ? `<span class="tag regime-${cs.regime}">${cs.regime}</span>` : '';
+    const patTag = cs.pattern && cs.pattern!=='none'
+      ? `<span class="tag pattern-${cs.pattern}">${cs.pattern}</span>` : '';
+    const blockedTag = blocked
+      ? `<span class="tag" style="color:var(--red);border-color:#7a2a30;">⊘ blocked</span>` : '';
+    const winTag = tradeable&&!blocked
+      ? `<span class="tag" style="color:var(--green);border-color:#1d5c40;">● open</span>`
+      : !blocked ? `<span class="tag" style="color:var(--faint);">⊘ gated</span>` : '';
+    const openPos = state.positions.find(p=>p.sym===t.sym);
+    card.innerHTML=`
       <div class="tick-row">
         <span class="tick-sym">${t.sym}</span>
-        <span class="tick-price mono" style="color:${candleColor};">${candleChar} ${s.price.toFixed(2)}</span>
+        <span class="tick-price mono" style="color:${cc};">${ca} ${s.price.toFixed(2)}</span>
       </div>
       <div class="tick-tags">
-        <span class="tag regime-${meta.regime}">${meta.regime}</span>
-        <span class="tag" style="color:${s.live?'var(--green)':'var(--faint)'}">${s.live?'● live':'○ sim'}</span>
-        ${windowTag}${deflTag}
-        ${state.positions.find(p=>p.sym===t.sym)?'<span class="tag" style="color:var(--green);">● open</span>':''}
+        ${regimeTag}${patTag}
+        <span class="zone-pill ${zoneClass(cs.zone||'pos-gex')}" style="font-size:9px;">${zoneLabel(cs.zone||'pos-gex')}</span>
+        ${winTag}${blockedTag}
+        ${openPos?'<span class="tag" style="color:var(--green);">● pos</span>':''}
       </div>
-      <div class="score-bar"><i style="width:${Math.min(100,Math.max(0,setup.score*10))}%"></i></div>`;
+      <div class="trinity-row">${dots}</div>
+      <div class="score-bar"><i style="width:${Math.min(100,Math.max(0,(cs.score||0)*8))}%"></i></div>`;
     el.appendChild(card);
   });
 }
 
 function renderLadder(){
-  const s      = state.ticks[state.selected];
-  const meta   = classify(s);
-  const pos    = state.positions.find(p => p.sym === s.sym);
+  const s    = state.ticks[state.selected];
+  const cs   = classifyAndScore(s);
+  const pos  = state.positions.find(p=>p.sym===s.sym);
   const candle = candleDirection(s);
   document.getElementById('ladderSym').textContent = s.sym;
   document.getElementById('ladderPx').textContent  = s.price.toFixed(2);
 
   // candle pill
   const cp = document.getElementById('candlePill');
-  if(candle === 'red'){
-    cp.className = 'candle-pill red'; cp.textContent = '▼ red candle';
-  } else if(candle === 'green'){
-    cp.className = 'candle-pill green'; cp.textContent = '▲ green candle';
-  } else {
-    cp.className = 'candle-pill flat'; cp.textContent = '— flat';
+  if(candle==='red'){ cp.className='candle-pill red'; cp.textContent='▼ red'; }
+  else if(candle==='green'){ cp.className='candle-pill green'; cp.textContent='▲ green'; }
+  else { cp.className='candle-pill flat'; cp.textContent='— flat'; }
+
+  // status badge
+  const te = document.getElementById('stopTimerDisplay');
+  if(pos&&pos.trailArmed){
+    te.style.display='inline-block';
+    te.innerHTML=`<span class="trail-badge">⚡ TRAIL · stop $${TRAIL_EXIT.toFixed(0)}</span>`;
+  } else if(pos&&pos.stopCountdown!==null){
+    const secs=Math.ceil(pos.stopCountdown/1000);
+    te.style.display='inline-block';
+    te.innerHTML=`<span class="stop-timer">⏱ ${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}</span>`;
+  } else { te.style.display='none'; }
+
+  // SVG ladder
+  const strikes = [...s.strikes].sort((a,b)=>b.strike-a.strike);
+  const rowH   = 360/Math.max(strikes.length,1);
+  const maxAbs = Math.max(...strikes.map(n=>Math.abs(n.value)),1);
+  let svg='';
+
+  // wall lines
+  const lo = strikes[strikes.length-1]?.strike??0;
+  const hi = strikes[0]?.strike??1;
+  const range = Math.max(hi-lo,1);
+  const toY = px => 10+((hi-px)/range)*360;
+
+  if(s.callWall>=lo&&s.callWall<=hi){
+    const cy=toY(s.callWall);
+    svg+=`<line x1="0" y1="${cy}" x2="520" y2="${cy}" stroke="var(--green)" stroke-dasharray="6 3" opacity="0.4"/>
+          <text x="5" y="${cy-3}" fill="var(--green)" font-size="8" opacity="0.7">call wall ${s.callWall}</text>`;
+  }
+  if(s.putWall>=lo&&s.putWall<=hi){
+    const py2=toY(s.putWall);
+    svg+=`<line x1="0" y1="${py2}" x2="520" y2="${py2}" stroke="var(--red)" stroke-dasharray="6 3" opacity="0.4"/>
+          <text x="5" y="${py2+10}" fill="var(--red)" font-size="8" opacity="0.7">put wall ${s.putWall}</text>`;
+  }
+  if(s.flipLevel>=lo&&s.flipLevel<=hi){
+    const fy=toY(s.flipLevel);
+    svg+=`<line x1="0" y1="${fy}" x2="520" y2="${fy}" stroke="var(--gold)" stroke-dasharray="3 3" opacity="0.6"/>
+          <text x="5" y="${fy-3}" fill="var(--gold)" font-size="8" opacity="0.8">γ flip ${s.flipLevel.toFixed(1)}</text>`;
   }
 
-  // stop / trail badge
-  const timerEl = document.getElementById('stopTimerDisplay');
-  if(pos && pos.trailArmed){
-    timerEl.style.display = 'inline-block';
-    timerEl.innerHTML = `<span class="trail-badge">⚡ TRAILING · stop $${TRAIL_EXIT.toFixed(0)}</span>`;
-  } else if(pos && pos.stopCountdown !== null){
-    const secs = Math.ceil(pos.stopCountdown / 1000);
-    const mins = Math.floor(secs / 60);
-    const rem  = secs % 60;
-    timerEl.style.display = 'inline-block';
-    timerEl.innerHTML = `<span class="stop-timer">⏱ STOP ${mins}:${String(rem).padStart(2,'0')}</span>`;
-  } else {
-    timerEl.style.display = 'none';
-  }
-
-  const strikes = [...s.strikes].sort((a,b) => b.strike - a.strike);
-  const rowH    = 340 / Math.max(strikes.length, 1);
-  const maxAbs  = Math.max(...strikes.map(n => Math.abs(n.value)), 1);
-  let svg = '';
-  strikes.forEach((n, i) => {
-    const y      = 10 + i * rowH;
-    const w      = Math.abs(n.value) / maxAbs * 200;
-    const color  = n.value >= 0 ? 'var(--gold)' : 'var(--violet)';
-    const isKing = n === meta.king;
-    const isGK   = n === meta.gkAbove || n === meta.gkBelow;
-    const isStop = pos && Math.abs(n.strike - pos.stopStrike) < 0.01;
-    const isTgt  = pos && pos.targetStrike && Math.abs(n.strike - pos.targetStrike) < 0.01;
-    const tags   = [];
-    if(isStop) tags.push({t:'◈ stop', c:'var(--red)'});
-    if(isTgt)  tags.push({t:'◎ tgt',  c:'var(--green)'});
-    if(isKing) tags.push({t:'♛ king', c:'var(--gold)'});
-    if(isGK && !isStop && !isTgt) tags.push({t:'⛊ gate', c:'var(--dim)'});
-    const labelText  = tags.map(x=>x.t).join('  ·  ');
-    const labelColor = tags[0]?.c || 'var(--dim)';
-    svg += `
+  strikes.forEach((n,i)=>{
+    const y      = 10+i*rowH;
+    const w      = Math.abs(n.value)/maxAbs*190;
+    const color  = n.value>=0?'var(--gold)':'var(--violet)';
+    const isKing = n===cs.king;
+    const isGK   = n===cs.gkAbove||n===cs.gkBelow;
+    const isStop = pos&&Math.abs(n.strike-pos.stopStrike)<0.01;
+    const isTgt  = pos&&pos.targetStrike&&Math.abs(n.strike-pos.targetStrike)<0.01;
+    const tags=[];
+    if(isStop) tags.push({t:'◈ stop',c:'var(--red)'});
+    if(isTgt)  tags.push({t:'◎ tgt', c:'var(--green)'});
+    if(isKing) tags.push({t:'♛ king',c:'var(--gold)'});
+    if(isGK&&!isStop&&!isTgt) tags.push({t:'⛊ gate',c:'var(--dim)'});
+    // node quality indicator
+    const qual = nodeQuality(n);
+    const qualOp = qual==='fresh'?1:qual==='tested'?0.7:qual==='stale'?0.4:0.25;
+    const labelText  = tags.map(x=>x.t).join(' · ');
+    const labelColor = tags[0]?.c||'var(--dim)';
+    svg+=`
       <g>
         <text x="60" y="${y+rowH*.65}" fill="${isStop?'var(--red)':isGK?'var(--text)':'var(--dim)'}" font-size="10" text-anchor="end">${n.strike}</text>
-        <rect x="70" y="${y+rowH*.2}" width="${w}" height="${rowH*.5}" rx="3" fill="${color}" opacity="${isKing?1:.5}"/>
-        ${labelText?`<text x="${70+w+8}" y="${y+rowH*.65}" fill="${labelColor}" font-size="9">${labelText}</text>`:''}
+        <rect x="70" y="${y+rowH*.2}" width="${w}" height="${rowH*.5}" rx="3" fill="${color}" opacity="${isKing?qualOp:qualOp*.55}"/>
+        ${n.testCount>0?`<text x="68" y="${y+rowH*.65}" fill="var(--faint)" font-size="7" text-anchor="end">${n.testCount}✗</text>`:''}
+        ${labelText?`<text x="${70+w+6}" y="${y+rowH*.65}" fill="${labelColor}" font-size="9">${labelText}</text>`:''}
       </g>`;
   });
 
-  const lo   = strikes[strikes.length-1]?.strike ?? 0;
-  const hi   = strikes[0]?.strike ?? 1;
-  const frac = (hi - s.price) / Math.max(hi - lo, 1);
-  const py   = 10 + frac * 340;
-  svg += `<line x1="0" y1="${py}" x2="520" y2="${py}" stroke="var(--text)" stroke-dasharray="4 3" opacity="0.5"/>
-          <circle cx="500" cy="${py}" r="4" fill="var(--text)"/>`;
+  // spot line
+  const spy = 10+((hi-s.price)/range)*360;
+  svg+=`<line x1="0" y1="${spy}" x2="520" y2="${spy}" stroke="var(--text)" stroke-dasharray="4 3" opacity="0.5"/>
+        <circle cx="504" cy="${spy}" r="4" fill="var(--text)"/>`;
   document.getElementById('ladderSvg').innerHTML = svg;
 
-  const setup     = scoreSetup(s, meta);
+  // vote grid
+  const vg = document.getElementById('voteGrid');
+  if(cs.trinity){
+    const {gexVote,dexVote,vexVote,flowVote,strength} = cs.trinity;
+    vg.innerHTML=`
+      <div class="vote-cell"><div class="label">GEX vote</div><div class="val ${gexVote}">${gexVote.toUpperCase()}</div></div>
+      <div class="vote-cell"><div class="label">DEX vote</div><div class="val ${dexVote}">${dexVote.toUpperCase()}</div></div>
+      <div class="vote-cell"><div class="label">VEX vote</div><div class="val ${vexVote}">${vexVote.toUpperCase()}</div></div>
+      <div class="vote-cell"><div class="label">Flow vote</div><div class="val ${flowVote}">${flowVote.toUpperCase()}</div></div>
+      <div class="vote-cell"><div class="label">Trinity</div><div class="val gold">${strength}/4 ${cs.direction?cs.direction.toUpperCase():'—'}</div></div>
+      <div class="vote-cell"><div class="label">Zone</div><div class="val gold">${zoneLabel(cs.zone||'—')}</div></div>`;
+  } else { vg.innerHTML=''; }
+
+  // reasons
   const tradeable = isTradeableNow(s.sym);
-  const deflReady = tradeable && setup.direction && deflectionConfirmed(setup.direction, candle);
-  let structLabel;
-  if(!tradeable){
-    structLabel = `⊘ gated — ${nextWindowLabel(s.sym) ?? 'no more windows today'}`;
-  } else if(setup.structure === 'none'){
-    structLabel = '— score too low';
-  } else if(!setup.direction){
-    structLabel = '— no directional bias';
-  } else if(!deflReady){
-    const needed = setup.direction === 'call' ? '🔴 red candle' : '🟢 green candle';
-    structLabel = `⏳ waiting for ${needed} deflection`;
-  } else {
-    structLabel = `🔴 NAKED LONG ${setup.direction.toUpperCase()} · deflection confirmed`;
+  const blocked   = state.blockedTickers.has(s.sym);
+  let statusLine='';
+  if(blocked) statusLine='<span style="color:var(--red);">⊘ BLOCKED this session (stop fired)</span>';
+  else if(!tradeable) statusLine=`<span style="color:var(--faint);">⊘ gated — ${nextWindowLabel(s.sym)??'no more windows'}</span>`;
+  else if(cs.blocked) statusLine=`<span style="color:var(--cyan);">⛔ ${cs.reasons[0]}</span>`;
+  else if(cs.score<6) statusLine=`<span style="color:var(--faint);">Score ${cs.score} — below threshold (need 6+)</span>`;
+  else {
+    const candle2 = candleDirection(s);
+    const negGex = cs.zone==='neg-gex'||cs.zone==='below-pw';
+    const deflOk = negGex
+      ? (cs.direction==='call'&&candle2==='green')||(cs.direction==='put'&&candle2==='red')
+      : deflectionConfirmed(cs.direction||'',candle2);
+    if(!deflOk){
+      const need = negGex
+        ? (cs.direction==='call'?'🟢 green momentum':'🔴 red momentum')
+        : (cs.direction==='call'?'🔴 red deflection':'🟢 green deflection');
+      statusLine=`<span style="color:var(--gold);">⏳ waiting for ${need}</span>`;
+    } else {
+      statusLine=`<span style="color:var(--green);">✓ READY — ${cs.direction?.toUpperCase()} entry · score ${cs.score}</span>`;
+    }
   }
 
-  document.getElementById('reasonsBox').innerHTML =
-    `<b>Regime:</b> ${meta.regime} &nbsp;|&nbsp; <b>Score:</b> ${setup.score} &nbsp;|&nbsp; `+
-    `<b>Bias:</b> ${setup.direction||'—'} &nbsp;|&nbsp; `+
-    `<b>Candle:</b> <span style="color:${candle==='red'?'var(--red)':candle==='green'?'var(--green)':'var(--faint)'}">${candle}</span><br>`+
-    `<b>Status:</b> ${structLabel}<br>`+
-    `<b>DTE:</b> 0 (0DTE) &nbsp;|&nbsp; `+
-    `<b>Stop node:</b> ${setup.stopNode?.strike??'—'} (${STOP_HOLD_LABEL} hold) &nbsp;|&nbsp; `+
-    `<b>Target:</b> ${setup.targetNode?.strike??'—'} &nbsp;|&nbsp; `+
-    `<b>Trail stop:</b> $${TRAIL_EXIT.toFixed(0)} (90%) after 100%<br><br>`+
-    setup.reasons.map(r => '• '+r).join('<br>');
+  document.getElementById('reasonsBox').innerHTML=
+    `<b>Regime:</b> ${cs.regime||'—'} &nbsp;|&nbsp; `+
+    `<b>Pattern:</b> ${cs.pattern||'—'} &nbsp;|&nbsp; `+
+    `<b>Score:</b> ${cs.score||0}<br>`+
+    `<b>Flip:</b> ${s.flipLevel.toFixed(1)} &nbsp;|&nbsp; `+
+    `<b>Call wall:</b> ${s.callWall} &nbsp;|&nbsp; `+
+    `<b>Put wall:</b> ${s.putWall}<br>`+
+    `<b>Stop node:</b> ${cs.stopNode?.strike??'—'} (5-min) &nbsp;|&nbsp; `+
+    `<b>Target:</b> ${cs.targetNode?.strike??'—'}<br>`+
+    `<b>Status:</b> ${statusLine}<br><br>`+
+    (cs.reasons||[]).map(r=>'• '+r).join('<br>');
 }
 
 function renderPositions(){
   const el = document.getElementById('positions');
-  if(!state.positions.length){ el.innerHTML = '<div class="empty">No open positions</div>'; return; }
-  el.innerHTML = '';
-  state.positions.forEach(p => {
-    const pnl = p.pnl || 0;
+  if(!state.positions.length){ el.innerHTML='<div class="empty">No open positions</div>'; return; }
+  el.innerHTML='';
+  state.positions.forEach(p=>{
+    const pnl = p.pnl||0;
     const div = document.createElement('div');
-    div.className = 'pos-card';
-    let statusHtml = '';
+    div.className='pos-card';
+    let statusHtml='';
     if(p.trailArmed){
-      statusHtml = `<span class="trail-badge">⚡ TRAILING · stop locked at $${TRAIL_EXIT.toFixed(0)}</span>`;
-    } else if(p.stopCountdown !== null){
-      const secs = Math.ceil(p.stopCountdown / 1000);
-      const mins = Math.floor(secs / 60);
-      const rem  = secs % 60;
-      statusHtml = `<span class="stop-timer">⏱ stop in ${mins}:${String(rem).padStart(2,'0')}</span>`;
+      statusHtml=`<span class="trail-badge">⚡ TRAIL · stop $${TRAIL_EXIT.toFixed(0)}</span>`;
+    } else if(p.stopCountdown!==null){
+      const secs=Math.ceil(p.stopCountdown/1000);
+      statusHtml=`<span class="stop-timer">⏱ ${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}</span>`;
     }
-    const candleLabel = p.entryCandle === 'red' ? '🔴 red deflection' : '🟢 green deflection';
-    div.innerHTML = `
+    div.innerHTML=`
       <div class="pos-top">
         <span class="pos-dir-${p.direction}">${p.sym} · ${p.direction.toUpperCase()}</span>
         <span class="risk-pill risk-naked">naked</span>
       </div>
       <div class="pos-meta">
-        ${candleLabel} · spot ${p.entrySpot} · strike ${p.buyStrike} · 0DTE<br>
-        stop @ ${p.stopStrike} · target ${p.targetStrike??'—'}
+        ${p.entryRegime}·${p.entryPattern} · T${p.trinityStrength}/4 · ${p.entryCandle}<br>
+        spot ${p.entrySpot} · strike ${p.buyStrike} · 0DTE<br>
+        stop ${p.stopStrike} · target ${p.targetStrike??'—'}
       </div>
       <div class="pos-status">${statusHtml}</div>
       <div class="pos-pnl" style="color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div>`;
@@ -849,14 +1138,14 @@ function renderPositions(){
 }
 
 function renderStats(){
-  document.getElementById('statOpen').textContent = `${state.positions.length} / ${state.currentCap}`;
+  document.getElementById('statOpen').textContent=`${state.positions.length} / ${state.currentCap}`;
   const capEl = document.getElementById('statCap');
-  if(state.capLocked){ capEl.textContent = '1 ⚠ locked'; capEl.className = 'warn'; }
-  else { capEl.textContent = String(state.currentCap); capEl.className = ''; }
+  if(state.capLocked){ capEl.textContent='1 ⚠'; capEl.className='warn'; }
+  else { capEl.textContent=String(state.currentCap); capEl.className=''; }
   const pnlEl = document.getElementById('statPnl');
-  pnlEl.textContent = (state.dayPnl>=0?'+':'') + '$'+Math.abs(state.dayPnl).toFixed(2);
-  pnlEl.className   = state.dayPnl >= 0 ? 'pos mono' : 'neg mono';
-  document.getElementById('statTrades').textContent = state.tradesToday;
+  pnlEl.textContent=(state.dayPnl>=0?'+':'')+'$'+Math.abs(state.dayPnl).toFixed(2);
+  pnlEl.className = state.dayPnl>=0?'pos mono':'neg mono';
+  document.getElementById('statTrades').textContent=state.tradesToday;
 }
 
 function renderAll(){
@@ -867,50 +1156,52 @@ function renderAll(){
   renderStats();
 }
 
+// ── Main loop ────────────────────────────────────────────────
 function tick(){
   state.tickN++;
-  TICKERS.forEach(t => {
+  TICKERS.forEach(t=>{
     const s = state.ticks[t.sym];
-    const savedStrikes = s.live ? [...s.strikes] : null;
+    const saved = s.live ? [...s.strikes.map(n=>({...n}))] : null;
     driftTicker(s);
-    if(savedStrikes) s.strikes = savedStrikes;
+    if(saved){ s.strikes=saved; } // preserve live nodes, only drift price
   });
   if(state.tickN % NODE_FETCH_EVERY_N_TICKS === 0){
     fetchLiveNodes(TICKERS[rotateIdx % TICKERS.length].sym);
     rotateIdx++;
   }
   manage();
-  if(state.armed || state.mode==='paper'){ TICKERS.forEach(t => tryEnter(t.sym)); }
+  if(state.armed||state.mode==='paper') TICKERS.forEach(t=>tryEnter(t.sym));
   renderAll();
 }
 setInterval(tick, TICK_MS);
 tick();
 
-document.getElementById('killBtn').onclick = () => {
-  state.mode = 'paper'; state.armed = false;
-  document.getElementById('modeBadge').textContent = 'PAPER MODE';
-  document.getElementById('modeBadge').className   = 'badge paper';
-  document.getElementById('armPhrase').value = '';
-  log('KILL SWITCH — live trading disarmed, back to paper mode', 'system');
+// ── Controls ─────────────────────────────────────────────────
+document.getElementById('killBtn').onclick=()=>{
+  state.mode='paper'; state.armed=false;
+  document.getElementById('modeBadge').textContent='PAPER MODE';
+  document.getElementById('modeBadge').className='badge paper';
+  document.getElementById('armPhrase').value='';
+  log('KILL SWITCH — live trading disarmed','system');
 };
-document.getElementById('newDayBtn').onclick = () => {
-  state.positions = []; state.closedToday = []; state.dayPnl = 0; state.tradesToday = 0;
-  state.currentCap = 3; state.capLocked = false;
-  TICKERS.forEach(t => state.ticks[t.sym] = seedTicker(t));
-  log('New session — position cap reset to 3, P&L cleared', 'system');
+document.getElementById('newDayBtn').onclick=()=>{
+  state.positions=[]; state.closedToday=[]; state.dayPnl=0; state.tradesToday=0;
+  state.currentCap=3; state.capLocked=false;
+  state.blockedTickers.clear();
+  TICKERS.forEach(t=>state.ticks[t.sym]=seedTicker(t));
+  log('New session — cap reset · blocked tickers cleared · P&L cleared','system');
   renderAll();
 };
-document.getElementById('armBtn').onclick = () => {
-  if(document.getElementById('armPhrase').value.trim() !== 'ENABLE LIVE'){
-    log('Arm failed — type exactly: ENABLE LIVE', 'exit-loss');
-    return;
+document.getElementById('armBtn').onclick=()=>{
+  if(document.getElementById('armPhrase').value.trim()!=='ENABLE LIVE'){
+    log('Arm failed — type exactly: ENABLE LIVE','exit-loss'); return;
   }
-  state.mode = 'live'; state.armed = true;
-  document.getElementById('modeBadge').textContent = 'LIVE MODE';
-  document.getElementById('modeBadge').className   = 'badge live';
-  log('LIVE TRADING ARMED — orders routing to Robinhood automatically', 'system');
+  state.mode='live'; state.armed=true;
+  document.getElementById('modeBadge').textContent='LIVE MODE';
+  document.getElementById('modeBadge').className='badge live';
+  log('LIVE TRADING ARMED — full Skylit framework active — routing to Robinhood','system');
 };
-log('Heatseeker v3.6 started — paper mode — 100% trail · 90% stop · target node exit', 'system');
+log('Heatseeker v3.7 — full Skylit framework · Trinity · Patterns · Regimes · Air pockets · Execution doctrine','system');
 </script>
 </body>
 </html>
