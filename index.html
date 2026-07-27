@@ -79,6 +79,11 @@
     background:rgba(255,92,104,.15);border:1px solid #7a2a30;color:var(--red);
     font-family:'IBM Plex Mono',monospace;
   }
+  .trail-badge{
+    display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;
+    background:rgba(70,201,138,.12);border:1px solid #1d5c40;color:var(--green);
+    font-family:'IBM Plex Mono',monospace;
+  }
   .reasons{font-size:12px;color:var(--dim);line-height:1.7;}
   .reasons b{color:var(--text);}
   .pos-card{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--panel);}
@@ -87,7 +92,7 @@
   .pos-dir-put{color:var(--violet);}
   .pos-meta{font-size:11px;color:var(--dim);margin-top:4px;font-family:'IBM Plex Mono',monospace;}
   .pos-pnl{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;margin-top:6px;}
-  .pos-timer{font-size:10px;margin-top:4px;height:16px;}
+  .pos-status{font-size:10px;margin-top:4px;min-height:18px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
   .settings-block{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;background:var(--panel);}
   .settings-block label{display:block;font-size:11px;color:var(--dim);margin-bottom:6px;}
   .settings-block input{
@@ -104,6 +109,7 @@
   .log-line.exit-loss{color:var(--red);}
   .log-line.system{color:var(--violet);}
   .log-line.warn{color:var(--gold);}
+  .log-line.trail{color:var(--green);}
   ::-webkit-scrollbar{width:8px;}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
   .empty{color:var(--faint);font-size:12px;padding:20px 0;text-align:center;}
@@ -120,7 +126,7 @@
       <div class="mark"></div>
       <div>
         <h1>Heatseeker Autopilot</h1>
-        <span>options node-map engine · v3.2</span>
+        <span>options node-map engine · v3.3</span>
       </div>
     </div>
     <span id="modeBadge" class="badge paper">PAPER MODE</span>
@@ -156,6 +162,16 @@
       <h2>Open Positions</h2>
       <div id="positions"><div class="empty">No open positions</div></div>
       <h2 style="margin-top:16px;">Settings</h2>
+      <div class="settings-block">
+        <label>Exit rules — in priority order</label>
+        <div style="font-size:11px;color:var(--dim);line-height:2;">
+          <b style="color:var(--green);">1.</b> Hit 100% gain ($50) → arms trail, keeps running<br>
+          <b style="color:var(--green);">2.</b> Trail armed + P&amp;L drops to $0 → close at breakeven<br>
+          <b style="color:var(--text);">3.</b> Price reaches target node → close<br>
+          <b style="color:var(--red);">4.</b> Price holds beyond stop node 5 min → close<br>
+          <span style="color:var(--faint);">Trail locks in breakeven, lets winners run freely above 100%.</span>
+        </div>
+      </div>
       <div class="settings-block">
         <label>Risk rule</label>
         <div style="font-size:11px;color:var(--dim);line-height:1.9;">
@@ -196,20 +212,22 @@
 </div>
 <script>
 /* =============================================================
-   HEATSEEKER AUTOPILOT v3.2
+   HEATSEEKER AUTOPILOT v3.3
    Universe   : SPY, QQQ, SPX only — all 0DTE.
    Structure  : naked long calls/puts only — no spreads.
-   Exit rule  : price holds beyond stop node for 5 continuous
-                minutes -> cut. Recross resets clock to zero.
-   Entry      : score >= 6 -> naked long $50 premium.
-                score <  6 -> no trade.
-   Risk rule  : any losing STOP exit -> currentCap locked to 1
-                for the session. Resets on New Session only.
+   Exit rules (priority order):
+     1. P&L hits 100% ($50) → arm 100% trail
+     2. Trail armed + P&L drops to $0 → close at breakeven
+     3. Price reaches target node → close
+     4. Price holds beyond stop node 5 min → close
+   Risk rule  : any losing STOP exit -> currentCap locked to 1.
    ============================================================= */
 const ZERO_DTE_SYMS            = new Set(['SPY','QQQ','SPX']);
 const STOP_HOLD_MS             = 5 * 60 * 1000;
 const STOP_HOLD_LABEL          = '5-min';
 const CAPITAL                  = 50;
+const TRAIL_TRIGGER            = CAPITAL;        // 100% = $50
+const TRAIL_EXIT               = 0;             // trail closes at breakeven
 const TICK_MS                  = 2200;
 const NODE_FETCH_EVERY_N_TICKS = 8;
 const TICKERS = [
@@ -249,7 +267,7 @@ function seedTicker(t){
       value:  (Math.random()*2-1) * (i===0 ? 40 : 100/(Math.abs(i)+1)),
     });
   }
-  return { sym: t.sym, price: t.base, priceHistory: [t.base], strikes, live: false, warnedFailure: false };
+  return { sym: t.sym, price: t.base, priceHistory:[t.base], strikes, live:false, warnedFailure:false };
 }
 TICKERS.forEach(t => state.ticks[t.sym] = seedTicker(t));
 
@@ -317,12 +335,12 @@ async function fetchLiveNodes(sym){
 }
 
 function classify(s){
-  const vals = s.strikes.map(n => Math.abs(n.value));
-  const king = s.strikes.reduce((a,b) => Math.abs(b.value)>Math.abs(a.value) ? b : a);
+  const vals  = s.strikes.map(n => Math.abs(n.value));
+  const king  = s.strikes.reduce((a,b) => Math.abs(b.value)>Math.abs(a.value) ? b : a);
   const above = s.strikes.filter(n => n.strike > s.price).sort((a,b) => a.strike-b.strike);
   const below = s.strikes.filter(n => n.strike < s.price).sort((a,b) => b.strike-a.strike);
-  const gkAbove = above.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
-  const gkBelow = below.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
+  const gkAbove    = above.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
+  const gkBelow    = below.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
   const strongCount = vals.filter(v => v > 70).length;
   const upSkew   = above.reduce((a,n) => a + n.value, 0);
   const downSkew = below.reduce((a,n) => a + Math.abs(Math.min(0,n.value)), 0);
@@ -361,8 +379,6 @@ function scoreSetup(s, meta){
   let stopNode = null, targetNode = null;
   if(direction === 'call'){ stopNode = meta.gkBelow; targetNode = meta.gkAbove; }
   else if(direction === 'put'){ stopNode = meta.gkAbove; targetNode = meta.gkBelow; }
-
-  // naked only — score >= 6 enters, anything below sits out
   const structure = score >= 6 ? 'naked' : 'none';
   return {score, direction, reasons, stopNode, targetNode, structure};
 }
@@ -392,7 +408,8 @@ function tryEnter(sym){
     entrySpot: s.price, buyStrike, sellStrike: null,
     stopStrike: setup.stopNode.strike, targetStrike: setup.targetNode?.strike ?? null,
     dte: 0, capital: CAPITAL, opened: Date.now(), pnl: 0,
-    breakevenArmed: false, stopCrossedAt: null, stopCountdown: null,
+    trailArmed: false,          // ← true once 100% hit
+    stopCrossedAt: null, stopCountdown: null,
   };
   state.positions.push(pos);
   state.tradesToday++;
@@ -415,17 +432,28 @@ function manage(){
     pnl = Math.max(-pos.capital, pnl);
     pos.pnl = pnl;
 
-    // breakeven trail
-    if(pnl > 3) pos.breakevenArmed = true;
-    if(pos.breakevenArmed && pnl <= 0){ closePosition(pos, 'BREAKEVEN-TRAIL', 0); return; }
+    // ── 1. Arm 100% trail ──────────────────────────────────────
+    if(!pos.trailArmed && pnl >= TRAIL_TRIGGER){
+      pos.trailArmed = true;
+      log(
+        `${pos.sym} hit 100% (+$${pnl.toFixed(2)}) — trail armed · `+
+        `will close if P&L pulls back to $0`, 'trail'
+      );
+      return; // let it run this tick
+    }
 
-    // target hit
-    if(pos.targetStrike !== null){
+    // ── 2. Trail exit — pull back to breakeven ─────────────────
+    if(pos.trailArmed && pnl <= TRAIL_EXIT){
+      closePosition(pos, 'TRAIL-BREAKEVEN', pnl); return;
+    }
+
+    // ── 3. Target node hit ─────────────────────────────────────
+    if(!pos.trailArmed && pos.targetStrike !== null){
       const hit = pos.direction === 'call' ? px >= pos.targetStrike : px <= pos.targetStrike;
       if(hit){ closePosition(pos, 'TARGET', pnl); return; }
     }
 
-    // 5-minute stop clock
+    // ── 4. 5-minute stop clock ─────────────────────────────────
     const beyondStop = pos.direction === 'call' ? px < pos.stopStrike : px > pos.stopStrike;
     if(beyondStop){
       if(pos.stopCrossedAt === null){
@@ -455,7 +483,8 @@ function closePosition(pos, reason, pnl){
   const win = pnl >= 0;
   log(
     `EXIT ${pos.sym} (${reason}) — ${win?'+':''}$${pnl.toFixed(2)} · `+
-    `naked ${pos.direction} ${pos.buyStrike} 0DTE`,
+    `naked ${pos.direction} ${pos.buyStrike} 0DTE`+
+    `${pos.trailArmed ? ' · was trailing' : ''}`,
     win ? 'exit-win' : 'exit-loss'
   );
   if(reason.startsWith('STOP') && pnl < 0 && !state.capLocked){
@@ -467,7 +496,7 @@ function closePosition(pos, reason, pnl){
 }
 
 async function executeLiveOrder(pos){
-  const expDate = new Date().toISOString().slice(0,10);
+  const expDate   = new Date().toISOString().slice(0,10);
   const orderDesc =
     `Buy to open 1 ${pos.sym} ${pos.direction} option at strike ${pos.buyStrike}, `+
     `expiring ${expDate} (0DTE). Budget $${pos.capital} in premium. Limit order at mid.`;
@@ -532,9 +561,9 @@ function renderWatchlist(){
       </div>
       <div class="tick-tags">
         <span class="tag regime-${meta.regime}">${meta.regime}</span>
-        <span class="tag" style="color:${s.live?'var(--green)':'var(--faint)'}">${s.live ? '● live' : '○ sim'}</span>
-        ${setup.structure !== 'none' ? `<span class="risk-pill risk-naked" style="font-size:9px;">naked</span>` : ''}
-        ${state.positions.find(p => p.sym===t.sym) ? '<span class="tag" style="color:var(--green);">● open</span>' : ''}
+        <span class="tag" style="color:${s.live?'var(--green)':'var(--faint)'}">${s.live?'● live':'○ sim'}</span>
+        ${setup.structure!=='none'?`<span class="risk-pill risk-naked" style="font-size:9px;">naked</span>`:''}
+        ${state.positions.find(p=>p.sym===t.sym)?'<span class="tag" style="color:var(--green);">● open</span>':''}
       </div>
       <div class="score-bar"><i style="width:${Math.min(100,Math.max(0,setup.score*10))}%"></i></div>`;
     el.appendChild(card);
@@ -555,6 +584,9 @@ function renderLadder(){
     const rem  = secs % 60;
     timerEl.style.display = 'inline-block';
     timerEl.innerHTML = `<span class="stop-timer">⏱ STOP ${mins}:${String(rem).padStart(2,'0')}</span>`;
+  } else if(pos && pos.trailArmed){
+    timerEl.style.display = 'inline-block';
+    timerEl.innerHTML = `<span class="trail-badge">⚡ TRAILING</span>`;
   } else {
     timerEl.style.display = 'none';
   }
@@ -613,13 +645,18 @@ function renderPositions(){
     const pnl = p.pnl || 0;
     const div = document.createElement('div');
     div.className = 'pos-card';
-    let timerHtml = '';
-    if(p.stopCountdown !== null){
+
+    // status row — trail badge OR stop countdown
+    let statusHtml = '';
+    if(p.trailArmed){
+      statusHtml = `<span class="trail-badge">⚡ TRAILING — closes at $0</span>`;
+    } else if(p.stopCountdown !== null){
       const secs = Math.ceil(p.stopCountdown / 1000);
       const mins = Math.floor(secs / 60);
       const rem  = secs % 60;
-      timerHtml = `<div class="pos-timer"><span class="stop-timer">⏱ stop in ${mins}:${String(rem).padStart(2,'0')}</span></div>`;
+      statusHtml = `<span class="stop-timer">⏱ stop in ${mins}:${String(rem).padStart(2,'0')}</span>`;
     }
+
     div.innerHTML = `
       <div class="pos-top">
         <span class="pos-dir-${p.direction}">${p.sym} · ${p.direction.toUpperCase()}</span>
@@ -629,7 +666,7 @@ function renderPositions(){
         spot ${p.entrySpot} · strike ${p.buyStrike} · 0DTE<br>
         stop @ ${p.stopStrike} · target ${p.targetStrike??'—'}
       </div>
-      ${timerHtml}
+      <div class="pos-status">${statusHtml}</div>
       <div class="pos-pnl" style="color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div>`;
     el.appendChild(div);
   });
@@ -691,7 +728,7 @@ document.getElementById('armBtn').onclick = () => {
   document.getElementById('modeBadge').className   = 'badge live';
   log('LIVE TRADING ARMED — orders routing to Robinhood automatically', 'system');
 };
-log('Heatseeker v3.2 started — paper mode — naked longs only — 5-min stop clock', 'system');
+log('Heatseeker v3.3 started — paper mode — 100% trail exit — naked longs only', 'system');
 </script>
 </body>
 </html>
