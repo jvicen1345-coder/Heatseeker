@@ -32,6 +32,29 @@
   .badge{font-size:11px;padding:4px 9px;border-radius:20px;font-weight:600;letter-spacing:.4px;border:1px solid var(--border);}
   .badge.paper{color:var(--gold);border-color:var(--gold-dim);background:rgba(232,184,92,.08);}
   .badge.live{color:var(--red);border-color:#7a2a30;background:rgba(255,92,104,.1);}
+  .session-bar{
+    display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:8px;
+    border:1px solid var(--border);background:var(--panel);font-size:11px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .session-bar .et{color:var(--dim);}
+  .session-bar .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .session-bar .dot.open{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .session-bar .dot.closed{background:var(--faint);}
+  .session-bar .dot.spx{background:var(--violet);box-shadow:0 0 6px var(--violet);}
+  .session-pill{
+    font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;letter-spacing:.3px;border:1px solid;
+  }
+  .session-pill.open{color:var(--green);border-color:#1d5c40;background:rgba(70,201,138,.08);}
+  .session-pill.spx-only{color:var(--violet);border-color:var(--violet-dim);background:rgba(139,107,255,.08);}
+  .session-pill.closed{color:var(--faint);border-color:var(--faint);background:transparent;}
+  .candle-pill{
+    font-size:10px;padding:2px 8px;border-radius:5px;font-weight:700;letter-spacing:.3px;border:1px solid;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .candle-pill.green{color:var(--green);border-color:#1d5c40;background:rgba(70,201,138,.1);}
+  .candle-pill.red{color:var(--red);border-color:#7a2a30;background:rgba(255,92,104,.1);}
+  .candle-pill.flat{color:var(--faint);border-color:var(--faint);background:transparent;}
   .stat{font-size:11px;color:var(--dim);text-align:right;}
   .stat b{display:block;font-size:14px;color:var(--text);font-family:'IBM Plex Mono',monospace;}
   .stat b.pos{color:var(--green);}
@@ -56,6 +79,7 @@
   }
   .tick-card:hover{border-color:var(--faint);}
   .tick-card.active{border-color:var(--gold);}
+  .tick-card.gated{opacity:.45;}
   .tick-row{display:flex;justify-content:space-between;align-items:baseline;}
   .tick-sym{font-weight:700;font-size:13px;}
   .tick-price{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);}
@@ -126,10 +150,15 @@
       <div class="mark"></div>
       <div>
         <h1>Heatseeker Autopilot</h1>
-        <span>options node-map engine · v3.3</span>
+        <span>options node-map engine · v3.6</span>
       </div>
     </div>
     <span id="modeBadge" class="badge paper">PAPER MODE</span>
+    <div class="session-bar">
+      <div id="sessionDot" class="dot closed"></div>
+      <span id="sessionEt" class="et">--:-- ET</span>
+      <span id="sessionPill" class="session-pill closed">CLOSED</span>
+    </div>
     <div class="stat">Open Positions<b id="statOpen">0 / 3</b></div>
     <div class="stat">Position Cap<b id="statCap" class="mono">3</b></div>
     <div class="stat">Day P&amp;L<b id="statPnl" class="mono">$0.00</b></div>
@@ -148,6 +177,7 @@
           <h3 id="ladderSym">SPY</h3>
           <div style="display:flex;align-items:center;gap:12px;">
             <div id="stopTimerDisplay" style="display:none;"></div>
+            <div id="candlePill" class="candle-pill flat">— flat</div>
             <div class="px mono" id="ladderPx">—</div>
           </div>
         </div>
@@ -163,13 +193,34 @@
       <div id="positions"><div class="empty">No open positions</div></div>
       <h2 style="margin-top:16px;">Settings</h2>
       <div class="settings-block">
+        <label>Deflection filter — entry rule</label>
+        <div style="font-size:11px;color:var(--dim);line-height:2;">
+          Entries only fire when candle direction <b style="color:var(--text);">confirms a node deflection</b>:<br>
+          <span style="color:var(--red);">▼ Red candle</span> + support node below → <b style="color:var(--gold);">BUY CALL</b><br>
+          <span style="color:var(--green);">▲ Green candle</span> + resistance node above → <b style="color:var(--violet);">BUY PUT</b><br>
+          <span style="color:var(--faint);">Candle disagrees with node bias → no entry, wait.</span>
+        </div>
+      </div>
+      <div class="settings-block">
+        <label>Trading windows (ET)</label>
+        <div style="font-size:11px;color:var(--dim);line-height:2;">
+          <b style="color:var(--gold);">SPY / QQQ</b><br>
+          &nbsp;🟢 9:30 – 11:30am · Morning session<br>
+          &nbsp;⚫ 11:30am – 3:00pm · Midday — no new entries<br>
+          &nbsp;🟢 3:00 – 4:00pm · Power hour<br>
+          <b style="color:var(--violet);">SPX</b><br>
+          &nbsp;🟣 3:00 – 4:00pm · End of day only<br>
+          <span style="color:var(--faint);">Open positions always managed normally — no force-close.</span>
+        </div>
+      </div>
+      <div class="settings-block">
         <label>Exit rules — in priority order</label>
         <div style="font-size:11px;color:var(--dim);line-height:2;">
-          <b style="color:var(--green);">1.</b> Hit 100% gain ($50) → arms trail, keeps running<br>
-          <b style="color:var(--green);">2.</b> Trail armed + P&amp;L drops to $0 → close at breakeven<br>
+          <b style="color:var(--green);">1.</b> Hit 100% gain ($50) → lock trailing stop at 90% ($45)<br>
+          <b style="color:var(--green);">2.</b> Trail armed + P&amp;L drops to $45 → close, locked in<br>
           <b style="color:var(--text);">3.</b> Price reaches target node → close<br>
           <b style="color:var(--red);">4.</b> Price holds beyond stop node 5 min → close<br>
-          <span style="color:var(--faint);">Trail locks in breakeven, lets winners run freely above 100%.</span>
+          <span style="color:var(--faint);">After 100%, worst case is always +$45. Target node still the upside exit.</span>
         </div>
       </div>
       <div class="settings-block">
@@ -177,21 +228,6 @@
         <div style="font-size:11px;color:var(--dim);line-height:1.9;">
           Any losing stop exit locks the position cap to <b style="color:var(--text);">1</b> for the rest of the session.<br>
           <span style="color:var(--faint);">Resets on New Session only.</span>
-        </div>
-      </div>
-      <div class="settings-block">
-        <label>Confidence thresholds</label>
-        <div style="font-size:11px;color:var(--dim);line-height:1.9;">
-          <span class="risk-pill risk-naked">NAKED</span>&nbsp; Score &ge; 6 — long call or put · $50 premium<br>
-          <span style="color:var(--faint);">Score &lt; 6 — no trade</span>
-        </div>
-      </div>
-      <div class="settings-block">
-        <label>Stop rule</label>
-        <div style="font-size:11px;color:var(--dim);line-height:1.9;">
-          Price must hold beyond the stop node for <b style="color:var(--text);">5 continuous minutes</b> to trigger exit.<br>
-          Recrossing the node resets the clock to zero.<br>
-          <span style="color:var(--faint);">Calls: price holds below stop node · Puts: price holds above stop node</span>
         </div>
       </div>
       <div class="settings-block">
@@ -212,24 +248,83 @@
 </div>
 <script>
 /* =============================================================
-   HEATSEEKER AUTOPILOT v3.3
-   Universe   : SPY, QQQ, SPX only — all 0DTE.
-   Structure  : naked long calls/puts only — no spreads.
-   Exit rules (priority order):
-     1. P&L hits 100% ($50) → arm 100% trail
-     2. Trail armed + P&L drops to $0 → close at breakeven
-     3. Price reaches target node → close
+   HEATSEEKER AUTOPILOT v3.6
+   Universe   : SPY, QQQ, SPX — all 0DTE.
+   Entry gate : deflection filter:
+                RED candle   + support node below  → BUY CALL
+                GREEN candle + resistance node above → BUY PUT
+   Trading windows (ET):
+     SPY/QQQ : 9:30–11:30am  +  3:00–4:00pm
+     SPX     : 3:00–4:00pm only
+   Open positions: always managed, no force-close.
+   Structure  : naked long calls/puts only.
+   Exit rules (priority):
+     1. P&L >= $50 (100%) → arm trail, lock stop at $45 (90%)
+     2. Trail armed + P&L <= $45 → close, locked in at 90%
+     3. Target node hit → close
      4. Price holds beyond stop node 5 min → close
-   Risk rule  : any losing STOP exit -> currentCap locked to 1.
+   Risk rule  : any losing STOP → cap locked to 1 for session.
    ============================================================= */
-const ZERO_DTE_SYMS            = new Set(['SPY','QQQ','SPX']);
 const STOP_HOLD_MS             = 5 * 60 * 1000;
 const STOP_HOLD_LABEL          = '5-min';
 const CAPITAL                  = 50;
-const TRAIL_TRIGGER            = CAPITAL;        // 100% = $50
-const TRAIL_EXIT               = 0;             // trail closes at breakeven
+const TRAIL_TRIGGER            = CAPITAL;           // 100% = $50
+const TRAIL_EXIT               = CAPITAL * 0.9;     // 90%  = $45
 const TICK_MS                  = 2200;
 const NODE_FETCH_EVERY_N_TICKS = 8;
+const CANDLE_PERIOD            = 5;
+
+const WINDOWS = {
+  SPY: [{open:570, close:690},{open:900, close:960}],
+  QQQ: [{open:570, close:690},{open:900, close:960}],
+  SPX: [{open:900, close:960}],
+};
+
+function getETMinutes(){
+  const etStr = new Date().toLocaleString('en-US',{timeZone:'America/New_York'});
+  const et    = new Date(etStr);
+  return et.getHours() * 60 + et.getMinutes();
+}
+function getETTimeString(){
+  return new Date().toLocaleTimeString('en-US',{
+    timeZone:'America/New_York', hour:'2-digit', minute:'2-digit', second:'2-digit',
+  });
+}
+function isTradeableNow(sym){
+  const mins = getETMinutes();
+  return (WINDOWS[sym] ?? []).some(w => mins >= w.open && mins < w.close);
+}
+function globalSessionState(){
+  if(isTradeableNow('SPY')) return 'open';
+  if(isTradeableNow('SPX')) return 'spx-only';
+  return 'closed';
+}
+function nextWindowLabel(sym){
+  const mins = getETMinutes();
+  const next = (WINDOWS[sym] ?? []).find(w => w.open > mins);
+  if(!next) return null;
+  const h = Math.floor(next.open / 60);
+  const m = String(next.open % 60).padStart(2,'0');
+  return `opens ${h > 12 ? h-12 : h}:${m}${h>=12?'pm':'am'} ET`;
+}
+
+function candleDirection(s){
+  const hist = s.priceHistory;
+  if(hist.length < CANDLE_PERIOD + 1) return 'flat';
+  const prev      = hist[hist.length - 1 - CANDLE_PERIOD];
+  const curr      = hist[hist.length - 1];
+  const threshold = curr * 0.0001;
+  if(curr < prev - threshold) return 'red';
+  if(curr > prev + threshold) return 'green';
+  return 'flat';
+}
+function deflectionConfirmed(direction, candle){
+  if(candle === 'flat') return false;
+  if(direction === 'call' && candle === 'red')   return true;
+  if(direction === 'put'  && candle === 'green') return true;
+  return false;
+}
+
 const TICKERS = [
   {sym:'SPY', base:670},
   {sym:'QQQ', base:608},
@@ -267,7 +362,7 @@ function seedTicker(t){
       value:  (Math.random()*2-1) * (i===0 ? 40 : 100/(Math.abs(i)+1)),
     });
   }
-  return { sym: t.sym, price: t.base, priceHistory:[t.base], strikes, live:false, warnedFailure:false };
+  return { sym:t.sym, price:t.base, priceHistory:[t.base], strikes, live:false, warnedFailure:false };
 }
 TICKERS.forEach(t => state.ticks[t.sym] = seedTicker(t));
 
@@ -339,8 +434,8 @@ function classify(s){
   const king  = s.strikes.reduce((a,b) => Math.abs(b.value)>Math.abs(a.value) ? b : a);
   const above = s.strikes.filter(n => n.strike > s.price).sort((a,b) => a.strike-b.strike);
   const below = s.strikes.filter(n => n.strike < s.price).sort((a,b) => b.strike-a.strike);
-  const gkAbove    = above.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
-  const gkBelow    = below.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
+  const gkAbove     = above.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
+  const gkBelow     = below.reduce((best,n) => !best || Math.abs(n.value)>Math.abs(best.value) ? n : best, null);
   const strongCount = vals.filter(v => v > 70).length;
   const upSkew   = above.reduce((a,n) => a + n.value, 0);
   const downSkew = below.reduce((a,n) => a + Math.abs(Math.min(0,n.value)), 0);
@@ -366,9 +461,9 @@ function scoreSetup(s, meta){
   const distBelow = meta.gkBelow ? Math.abs(meta.gkBelow.strike - s.price) : Infinity;
   let direction = null;
   if(distBelow < distAbove && meta.gkBelow){
-    direction = 'call'; score += 2; reasons.push(`Fading floor node at ${meta.gkBelow.strike}`);
+    direction = 'call'; score += 2; reasons.push(`Support node at ${meta.gkBelow.strike} — watching for red candle deflection`);
   } else if(meta.gkAbove){
-    direction = 'put'; score += 2; reasons.push(`Fading ceiling node at ${meta.gkAbove.strike}`);
+    direction = 'put'; score += 2; reasons.push(`Resistance node at ${meta.gkAbove.strike} — watching for green candle deflection`);
   }
   if(Math.abs(meta.king.value) > 90){
     score += 2; reasons.push(`King magnitude ${meta.king.value.toFixed(0)} at ${meta.king.strike}`);
@@ -395,12 +490,18 @@ function selectOTMStrike(s, direction){
 }
 
 function tryEnter(sym){
+  if(!isTradeableNow(sym)) return;
   if(state.positions.find(p => p.sym === sym)) return;
   if(state.positions.length >= state.currentCap) return;
-  const s     = state.ticks[sym];
-  const meta  = classify(s);
-  const setup = scoreSetup(s, meta);
+  const s      = state.ticks[sym];
+  const meta   = classify(s);
+  const setup  = scoreSetup(s, meta);
   if(setup.score < 6 || !setup.direction || !setup.stopNode) return;
+
+  // ── Deflection filter ────────────────────────────────────────
+  const candle = candleDirection(s);
+  if(!deflectionConfirmed(setup.direction, candle)) return;
+
   const buyStrike = selectOTMStrike(s, setup.direction);
   const pos = {
     id: Math.random().toString(36).slice(2,8),
@@ -408,15 +509,17 @@ function tryEnter(sym){
     entrySpot: s.price, buyStrike, sellStrike: null,
     stopStrike: setup.stopNode.strike, targetStrike: setup.targetNode?.strike ?? null,
     dte: 0, capital: CAPITAL, opened: Date.now(), pnl: 0,
-    trailArmed: false,          // ← true once 100% hit
+    trailArmed: false,
     stopCrossedAt: null, stopCountdown: null,
+    entryCandle: candle,
   };
   state.positions.push(pos);
   state.tradesToday++;
+  const candleLabel = candle === 'red' ? '🔴 red candle' : '🟢 green candle';
   log(
-    `ENTER ${sym} — naked long ${pos.direction.toUpperCase()} · strike ${buyStrike} · 0DTE · `+
-    `stop node ${pos.stopStrike} (${STOP_HOLD_LABEL} clock) · target ${pos.targetStrike??'—'} · `+
-    `score ${setup.score} · ${setup.reasons.join('; ')}`, 'enter'
+    `ENTER ${sym} — naked long ${pos.direction.toUpperCase()} · ${candleLabel} deflection · `+
+    `strike ${buyStrike} · 0DTE · stop node ${pos.stopStrike} (${STOP_HOLD_LABEL} clock) · `+
+    `target ${pos.targetStrike??'—'} · score ${setup.score} · ${setup.reasons.join('; ')}`, 'enter'
   );
   if(state.mode === 'live' && state.armed) executeLiveOrder(pos);
   else log(`[PAPER] would route ${sym} naked long ${pos.direction.toUpperCase()} @ ${buyStrike} 0DTE to Robinhood`, 'system');
@@ -432,44 +535,51 @@ function manage(){
     pnl = Math.max(-pos.capital, pnl);
     pos.pnl = pnl;
 
-    // ── 1. Arm 100% trail ──────────────────────────────────────
+    // ── 1. Arm 100% trail — lock stop at 90% ($45) ────────────
     if(!pos.trailArmed && pnl >= TRAIL_TRIGGER){
       pos.trailArmed = true;
       log(
         `${pos.sym} hit 100% (+$${pnl.toFixed(2)}) — trail armed · `+
-        `will close if P&L pulls back to $0`, 'trail'
+        `stop locked at $${TRAIL_EXIT.toFixed(0)} (90%) · running to target node`, 'trail'
       );
-      return; // let it run this tick
+      return;
     }
 
-    // ── 2. Trail exit — pull back to breakeven ─────────────────
+    // ── 2. Trail exit — pull back to 90% ──────────────────────
     if(pos.trailArmed && pnl <= TRAIL_EXIT){
-      closePosition(pos, 'TRAIL-BREAKEVEN', pnl); return;
+      closePosition(pos, 'TRAIL-90%', pnl); return;
     }
 
     // ── 3. Target node hit ─────────────────────────────────────
-    if(!pos.trailArmed && pos.targetStrike !== null){
+    // Always check target even when trailing — target is the upside exit
+    if(pos.targetStrike !== null){
       const hit = pos.direction === 'call' ? px >= pos.targetStrike : px <= pos.targetStrike;
       if(hit){ closePosition(pos, 'TARGET', pnl); return; }
     }
 
-    // ── 4. 5-minute stop clock ─────────────────────────────────
-    const beyondStop = pos.direction === 'call' ? px < pos.stopStrike : px > pos.stopStrike;
-    if(beyondStop){
-      if(pos.stopCrossedAt === null){
-        pos.stopCrossedAt = now;
-        log(
-          `${pos.sym} broke through stop node ${pos.stopStrike} — `+
-          `${STOP_HOLD_LABEL} clock started (${pos.direction.toUpperCase()})`, 'warn'
-        );
+    // ── 4. 5-minute stop clock (only fires before trail arms) ──
+    if(!pos.trailArmed){
+      const beyondStop = pos.direction === 'call' ? px < pos.stopStrike : px > pos.stopStrike;
+      if(beyondStop){
+        if(pos.stopCrossedAt === null){
+          pos.stopCrossedAt = now;
+          log(
+            `${pos.sym} broke through stop node ${pos.stopStrike} — `+
+            `${STOP_HOLD_LABEL} clock started (${pos.direction.toUpperCase()})`, 'warn'
+          );
+        }
+        const elapsed = now - pos.stopCrossedAt;
+        pos.stopCountdown = Math.max(0, STOP_HOLD_MS - elapsed);
+        if(elapsed >= STOP_HOLD_MS){ closePosition(pos, 'STOP-5MIN', pnl); return; }
+      } else {
+        if(pos.stopCrossedAt !== null){
+          log(`${pos.sym} recrossed back through stop node ${pos.stopStrike} — clock reset to zero`, 'system');
+        }
+        pos.stopCrossedAt = null;
+        pos.stopCountdown = null;
       }
-      const elapsed = now - pos.stopCrossedAt;
-      pos.stopCountdown = Math.max(0, STOP_HOLD_MS - elapsed);
-      if(elapsed >= STOP_HOLD_MS){ closePosition(pos, 'STOP-5MIN', pnl); return; }
     } else {
-      if(pos.stopCrossedAt !== null){
-        log(`${pos.sym} recrossed back through stop node ${pos.stopStrike} — clock reset to zero`, 'system');
-      }
+      // trail is armed — node stop clock no longer relevant, clear it
       pos.stopCrossedAt = null;
       pos.stopCountdown = null;
     }
@@ -484,7 +594,7 @@ function closePosition(pos, reason, pnl){
   log(
     `EXIT ${pos.sym} (${reason}) — ${win?'+':''}$${pnl.toFixed(2)} · `+
     `naked ${pos.direction} ${pos.buyStrike} 0DTE`+
-    `${pos.trailArmed ? ' · was trailing' : ''}`,
+    `${pos.trailArmed ? ' · was trailing (90% stop)' : ''}`,
     win ? 'exit-win' : 'exit-loss'
   );
   if(reason.startsWith('STOP') && pnl < 0 && !state.capLocked){
@@ -496,10 +606,14 @@ function closePosition(pos, reason, pnl){
 }
 
 async function executeLiveOrder(pos){
-  const expDate   = new Date().toISOString().slice(0,10);
+  const expDate     = new Date().toISOString().slice(0,10);
+  const candleLabel = pos.entryCandle === 'red'
+    ? 'red candle deflection off support node'
+    : 'green candle deflection off resistance node';
   const orderDesc =
     `Buy to open 1 ${pos.sym} ${pos.direction} option at strike ${pos.buyStrike}, `+
-    `expiring ${expDate} (0DTE). Budget $${pos.capital} in premium. Limit order at mid.`;
+    `expiring ${expDate} (0DTE). Entry signal: ${candleLabel}. `+
+    `Budget $${pos.capital} in premium. Limit order at mid.`;
   try{
     const resp = await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -544,25 +658,59 @@ async function executeLiveClose(pos, reason){
   }
 }
 
+function renderSessionBar(){
+  const sess = globalSessionState();
+  const dot  = document.getElementById('sessionDot');
+  const pill = document.getElementById('sessionPill');
+  document.getElementById('sessionEt').textContent = getETTimeString() + ' ET';
+  if(sess === 'open'){
+    dot.className  = 'dot open';
+    pill.className = 'session-pill open';
+    pill.textContent = 'MORNING  +  POWER HOUR';
+  } else if(sess === 'spx-only'){
+    dot.className  = 'dot spx';
+    pill.className = 'session-pill spx-only';
+    pill.textContent = 'POWER HOUR — SPX only';
+  } else {
+    dot.className  = 'dot closed';
+    pill.className = 'session-pill closed';
+    const next = nextWindowLabel('SPY');
+    pill.textContent = next ? `CLOSED · SPY/QQQ ${next}` : 'CLOSED';
+  }
+}
+
 function renderWatchlist(){
   const el = document.getElementById('watchlist');
   el.innerHTML = '';
   TICKERS.forEach(t => {
-    const s     = state.ticks[t.sym];
-    const meta  = classify(s);
-    const setup = scoreSetup(s, meta);
-    const card  = document.createElement('div');
-    card.className = 'tick-card' + (state.selected===t.sym ? ' active' : '');
-    card.onclick   = () => { state.selected = t.sym; renderAll(); };
+    const s         = state.ticks[t.sym];
+    const meta      = classify(s);
+    const setup     = scoreSetup(s, meta);
+    const tradeable = isTradeableNow(t.sym);
+    const candle    = candleDirection(s);
+    const deflReady = tradeable && setup.direction && deflectionConfirmed(setup.direction, candle);
+    const card      = document.createElement('div');
+    card.className  = 'tick-card' +
+      (state.selected===t.sym ? ' active' : '') +
+      (!tradeable ? ' gated' : '');
+    card.onclick = () => { state.selected = t.sym; renderAll(); };
+    const candleColor = candle==='red' ? 'var(--red)' : candle==='green' ? 'var(--green)' : 'var(--faint)';
+    const candleChar  = candle==='red' ? '▼' : candle==='green' ? '▲' : '—';
+    const windowTag   = tradeable
+      ? `<span class="tag" style="color:var(--green);border-color:#1d5c40;">● entry open</span>`
+      : `<span class="tag" style="color:var(--faint);">⊘ gated</span>`;
+    const deflTag = deflReady
+      ? `<span class="tag" style="color:var(--gold);border-color:var(--gold-dim);">⚡ deflection</span>`
+      : '';
     card.innerHTML = `
       <div class="tick-row">
         <span class="tick-sym">${t.sym}</span>
-        <span class="tick-price mono">${s.price.toFixed(2)}</span>
+        <span class="tick-price mono" style="color:${candleColor};">${candleChar} ${s.price.toFixed(2)}</span>
       </div>
       <div class="tick-tags">
         <span class="tag regime-${meta.regime}">${meta.regime}</span>
         <span class="tag" style="color:${s.live?'var(--green)':'var(--faint)'}">${s.live?'● live':'○ sim'}</span>
-        ${setup.structure!=='none'?`<span class="risk-pill risk-naked" style="font-size:9px;">naked</span>`:''}
+        ${windowTag}${deflTag}
         ${state.positions.find(p=>p.sym===t.sym)?'<span class="tag" style="color:var(--green);">● open</span>':''}
       </div>
       <div class="score-bar"><i style="width:${Math.min(100,Math.max(0,setup.score*10))}%"></i></div>`;
@@ -571,22 +719,34 @@ function renderWatchlist(){
 }
 
 function renderLadder(){
-  const s    = state.ticks[state.selected];
-  const meta = classify(s);
-  const pos  = state.positions.find(p => p.sym === s.sym);
+  const s      = state.ticks[state.selected];
+  const meta   = classify(s);
+  const pos    = state.positions.find(p => p.sym === s.sym);
+  const candle = candleDirection(s);
   document.getElementById('ladderSym').textContent = s.sym;
   document.getElementById('ladderPx').textContent  = s.price.toFixed(2);
 
+  // candle pill
+  const cp = document.getElementById('candlePill');
+  if(candle === 'red'){
+    cp.className = 'candle-pill red'; cp.textContent = '▼ red candle';
+  } else if(candle === 'green'){
+    cp.className = 'candle-pill green'; cp.textContent = '▲ green candle';
+  } else {
+    cp.className = 'candle-pill flat'; cp.textContent = '— flat';
+  }
+
+  // stop / trail badge
   const timerEl = document.getElementById('stopTimerDisplay');
-  if(pos && pos.stopCountdown !== null){
+  if(pos && pos.trailArmed){
+    timerEl.style.display = 'inline-block';
+    timerEl.innerHTML = `<span class="trail-badge">⚡ TRAILING · stop $${TRAIL_EXIT.toFixed(0)}</span>`;
+  } else if(pos && pos.stopCountdown !== null){
     const secs = Math.ceil(pos.stopCountdown / 1000);
     const mins = Math.floor(secs / 60);
     const rem  = secs % 60;
     timerEl.style.display = 'inline-block';
     timerEl.innerHTML = `<span class="stop-timer">⏱ STOP ${mins}:${String(rem).padStart(2,'0')}</span>`;
-  } else if(pos && pos.trailArmed){
-    timerEl.style.display = 'inline-block';
-    timerEl.innerHTML = `<span class="trail-badge">⚡ TRAILING</span>`;
   } else {
     timerEl.style.display = 'none';
   }
@@ -626,14 +786,32 @@ function renderLadder(){
           <circle cx="500" cy="${py}" r="4" fill="var(--text)"/>`;
   document.getElementById('ladderSvg').innerHTML = svg;
 
-  const setup       = scoreSetup(s, meta);
-  const structLabel = setup.structure === 'naked' ? '🔴 NAKED LONG' : '— no trade';
+  const setup     = scoreSetup(s, meta);
+  const tradeable = isTradeableNow(s.sym);
+  const deflReady = tradeable && setup.direction && deflectionConfirmed(setup.direction, candle);
+  let structLabel;
+  if(!tradeable){
+    structLabel = `⊘ gated — ${nextWindowLabel(s.sym) ?? 'no more windows today'}`;
+  } else if(setup.structure === 'none'){
+    structLabel = '— score too low';
+  } else if(!setup.direction){
+    structLabel = '— no directional bias';
+  } else if(!deflReady){
+    const needed = setup.direction === 'call' ? '🔴 red candle' : '🟢 green candle';
+    structLabel = `⏳ waiting for ${needed} deflection`;
+  } else {
+    structLabel = `🔴 NAKED LONG ${setup.direction.toUpperCase()} · deflection confirmed`;
+  }
+
   document.getElementById('reasonsBox').innerHTML =
     `<b>Regime:</b> ${meta.regime} &nbsp;|&nbsp; <b>Score:</b> ${setup.score} &nbsp;|&nbsp; `+
-    `<b>Bias:</b> ${setup.direction||'—'} &nbsp;|&nbsp; <b>Structure:</b> ${structLabel}<br>`+
+    `<b>Bias:</b> ${setup.direction||'—'} &nbsp;|&nbsp; `+
+    `<b>Candle:</b> <span style="color:${candle==='red'?'var(--red)':candle==='green'?'var(--green)':'var(--faint)'}">${candle}</span><br>`+
+    `<b>Status:</b> ${structLabel}<br>`+
     `<b>DTE:</b> 0 (0DTE) &nbsp;|&nbsp; `+
     `<b>Stop node:</b> ${setup.stopNode?.strike??'—'} (${STOP_HOLD_LABEL} hold) &nbsp;|&nbsp; `+
-    `<b>Target:</b> ${setup.targetNode?.strike??'—'}<br><br>`+
+    `<b>Target:</b> ${setup.targetNode?.strike??'—'} &nbsp;|&nbsp; `+
+    `<b>Trail stop:</b> $${TRAIL_EXIT.toFixed(0)} (90%) after 100%<br><br>`+
     setup.reasons.map(r => '• '+r).join('<br>');
 }
 
@@ -645,25 +823,23 @@ function renderPositions(){
     const pnl = p.pnl || 0;
     const div = document.createElement('div');
     div.className = 'pos-card';
-
-    // status row — trail badge OR stop countdown
     let statusHtml = '';
     if(p.trailArmed){
-      statusHtml = `<span class="trail-badge">⚡ TRAILING — closes at $0</span>`;
+      statusHtml = `<span class="trail-badge">⚡ TRAILING · stop locked at $${TRAIL_EXIT.toFixed(0)}</span>`;
     } else if(p.stopCountdown !== null){
       const secs = Math.ceil(p.stopCountdown / 1000);
       const mins = Math.floor(secs / 60);
       const rem  = secs % 60;
       statusHtml = `<span class="stop-timer">⏱ stop in ${mins}:${String(rem).padStart(2,'0')}</span>`;
     }
-
+    const candleLabel = p.entryCandle === 'red' ? '🔴 red deflection' : '🟢 green deflection';
     div.innerHTML = `
       <div class="pos-top">
         <span class="pos-dir-${p.direction}">${p.sym} · ${p.direction.toUpperCase()}</span>
         <span class="risk-pill risk-naked">naked</span>
       </div>
       <div class="pos-meta">
-        spot ${p.entrySpot} · strike ${p.buyStrike} · 0DTE<br>
+        ${candleLabel} · spot ${p.entrySpot} · strike ${p.buyStrike} · 0DTE<br>
         stop @ ${p.stopStrike} · target ${p.targetStrike??'—'}
       </div>
       <div class="pos-status">${statusHtml}</div>
@@ -683,7 +859,13 @@ function renderStats(){
   document.getElementById('statTrades').textContent = state.tradesToday;
 }
 
-function renderAll(){ renderWatchlist(); renderLadder(); renderPositions(); renderStats(); }
+function renderAll(){
+  renderSessionBar();
+  renderWatchlist();
+  renderLadder();
+  renderPositions();
+  renderStats();
+}
 
 function tick(){
   state.tickN++;
@@ -728,7 +910,7 @@ document.getElementById('armBtn').onclick = () => {
   document.getElementById('modeBadge').className   = 'badge live';
   log('LIVE TRADING ARMED — orders routing to Robinhood automatically', 'system');
 };
-log('Heatseeker v3.3 started — paper mode — 100% trail exit — naked longs only', 'system');
+log('Heatseeker v3.6 started — paper mode — 100% trail · 90% stop · target node exit', 'system');
 </script>
 </body>
 </html>
