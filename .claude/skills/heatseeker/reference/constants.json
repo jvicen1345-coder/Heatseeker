@@ -1,0 +1,51 @@
+{
+  "_comment": "Ported 1:1 from index.html (Heatseeker Autopilot v3.9). ET = America/New_York. Minutes are minutes-since-midnight ET.",
+
+  "tickers": [
+    { "symbol": "SPY", "assetType": "equity" },
+    { "symbol": "QQQ", "assetType": "equity" },
+    { "symbol": "SPX", "assetType": "index" },
+    { "symbol": "AAPL", "assetType": "equity", "note": "Only lists same-day (0DTE) expirations on Fridays, unlike SPY/QQQ/SPX which list dailies — most sessions will have no 0DTE chain to trade. Skip gracefully per strategy.md rather than substituting a later expiration." },
+    { "symbol": "GOOGL", "assetType": "equity", "note": "Same weeklies-only caveat as AAPL — 0DTE chain typically only exists on Fridays." }
+  ],
+
+  "sessionWindows": {
+    "SPY": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
+    "QQQ": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
+    "SPX": [ { "open": 900, "close": 960 } ],
+    "AAPL": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
+    "GOOGL": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ]
+  },
+  "sessionWindowNotes": "570=9:30am, 690=11:30am (morning session), 900=3:00pm, 960=4:00pm (power hour). SPX only trades the power-hour window.",
+
+  "openLockoutMins": 5,
+  "charmWindowMins": 30,
+  "candlePeriodTicks": 5,
+
+  "riskDefaults": {
+    "dailyLossLimitUsd": 150,
+    "vixHaltLevel": 30,
+    "maxPositionSizeUsd": 75,
+    "eodCloseMinuteEt": 955,
+    "minScoreToTrade": 6,
+    "minNodeGex": 30,
+    "trailTriggerPct": 1.0,
+    "trailExitPct": 0.9,
+    "stopHoldMs": 300000
+  },
+
+  "positionSizingByScore": [
+    { "minScore": 10, "usd": 75 },
+    { "minScore": 8, "usd": 50 },
+    { "minScore": 6, "usd": 25 }
+  ],
+
+  "strikeDeltaFilter": { "min": 0.20, "max": 0.45 },
+
+  "eventDays2026": {
+    "_comment": "Update each year. FOMC / CPI / NFP dates block new entries for the whole session on that date. Verify against the official Fed and BLS calendars before relying on this — do not assume it is exhaustive or current.",
+    "fomc": ["2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29", "2026-09-16", "2026-10-28", "2026-12-09"],
+    "cpi": ["2026-01-13", "2026-02-11", "2026-03-11", "2026-04-10", "2026-05-12", "2026-06-10", "2026-07-14", "2026-08-12", "2026-09-11", "2026-10-13", "2026-11-12", "2026-12-10"],
+    "nfp": ["2026-01-09", "2026-02-06", "2026-03-06", "2026-04-03", "2026-05-08", "2026-06-05", "2026-07-02", "2026-08-07", "2026-09-04", "2026-10-02", "2026-11-06", "2026-12-04"]
+  }
+}
