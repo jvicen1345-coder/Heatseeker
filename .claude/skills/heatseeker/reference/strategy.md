@@ -5,7 +5,11 @@ adapted to run on **real data from HOOD_AGENT tools** instead of the simulator's
 random walk / Unusual Whales feed. Read this file when you need the exact scoring
 rules; `SKILL.md` only summarizes the procedure.
 
-This is a same-day (0DTE) options momentum/gamma strategy on SPY, QQQ, and SPX.
+This is a same-day (0DTE) options momentum/gamma strategy, run against the watchlist
+in `constants.json` (SPY, QQQ, SPX, AAPL, GOOGL). SPY/QQQ/SPX list daily expirations,
+so 0DTE is normally available every session; AAPL/GOOGL only list same-day expirations
+on their weekly (typically Friday) expiration days — on other days there's no 0DTE
+chain to trade, so skip them rather than substituting a later expiration.
 It looks for a strong directional consensus ("Trinity vote"), a nearby exposure
 wall it can use as a hard stop, and a clean path to a target strike, then sizes
 a small naked long call/put by conviction score.

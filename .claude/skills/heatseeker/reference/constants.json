@@ -4,13 +4,17 @@
   "tickers": [
     { "symbol": "SPY", "assetType": "equity" },
     { "symbol": "QQQ", "assetType": "equity" },
-    { "symbol": "SPX", "assetType": "index" }
+    { "symbol": "SPX", "assetType": "index" },
+    { "symbol": "AAPL", "assetType": "equity", "note": "Only lists same-day (0DTE) expirations on Fridays, unlike SPY/QQQ/SPX which list dailies — most sessions will have no 0DTE chain to trade. Skip gracefully per strategy.md rather than substituting a later expiration." },
+    { "symbol": "GOOGL", "assetType": "equity", "note": "Same weeklies-only caveat as AAPL — 0DTE chain typically only exists on Fridays." }
   ],
 
   "sessionWindows": {
     "SPY": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
     "QQQ": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
-    "SPX": [ { "open": 900, "close": 960 } ]
+    "SPX": [ { "open": 900, "close": 960 } ],
+    "AAPL": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ],
+    "GOOGL": [ { "open": 570, "close": 690 }, { "open": 900, "close": 960 } ]
   },
   "sessionWindowNotes": "570=9:30am, 690=11:30am (morning session), 900=3:00pm, 960=4:00pm (power hour). SPX only trades the power-hour window.",
 

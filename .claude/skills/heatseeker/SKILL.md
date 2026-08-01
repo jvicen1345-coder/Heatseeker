@@ -1,6 +1,6 @@
 ---
 name: heatseeker
-description: Runs the Heatseeker 0DTE gamma-exposure options strategy for SPY/QQQ/SPX on Robinhood using the live HOOD_AGENT tools — scans the watchlist, scores setups with the Trinity-vote framework, and manages open positions. Use when the user asks to run Heatseeker, scan for 0DTE/gamma setups, or run "the trading agent" / "the autopilot" for SPY, QQQ, or SPX options on Robinhood. Never places or closes an order without the user explicitly confirming that specific trade first — this is a decision-support and human-confirmed execution agent, not an unattended bot.
+description: Runs the Heatseeker 0DTE gamma-exposure options strategy for SPY/QQQ/SPX/AAPL/GOOGL on Robinhood using the live HOOD_AGENT tools — scans the watchlist, scores setups with the Trinity-vote framework, and manages open positions. Use when the user asks to run Heatseeker, scan for 0DTE/gamma setups, or run "the trading agent" / "the autopilot" for any of the watchlist tickers on Robinhood. Never places or closes an order without the user explicitly confirming that specific trade first — this is a decision-support and human-confirmed execution agent, not an unattended bot.
 ---
 
 # Heatseeker — Robinhood 0DTE options agent
